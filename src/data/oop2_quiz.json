@@ -1,0 +1,502 @@
+[
+  {
+    "id": 1,
+    "question": "What is the output of the following Java code?\n\nclass Adder {\n    static int add(int a, int b) { return a + b; }\n    static double add(double a, double b) { return a + b; }\n}\n\npublic class Test {\n    public static void main(String[] args) {\n        System.out.println(Adder.add(5, 5.5));\n    }\n}",
+    "option1": "10",
+    "option2": "10.5",
+    "option3": "Compile-time error",
+    "option4": "Runtime error",
+    "answer": "option2",
+    "explanation": "Method overloading resolves to the most specific type (double). The int 5 is promoted to double."
+  },
+  {
+    "id": 2,
+    "question": "Which of the following is true about Java's `final` keyword?",
+    "option1": "A final class can be extended.",
+    "option2": "A final method can be overridden.",
+    "option3": "A final variable can be reassigned.",
+    "option4": "A final method is inherited but cannot be overridden.",
+    "answer": "option4",
+    "explanation": "Final methods are inherited but cannot be overridden (Page 25)."
+  },
+  {
+    "id": 3,
+    "question": "What happens when this code is executed?\n\nclass Outer {\n    class Inner {}\n}\npublic class Test {\n    public static void main(String[] args) {\n        Inner obj = new Inner();\n    }\n}",
+    "option1": "Runs successfully",
+    "option2": "Compile-time error: Non-static inner class requires an Outer instance",
+    "option3": "Runtime NullPointerException",
+    "option4": "Creates an anonymous class",
+    "answer": "option2",
+    "explanation": "Non-static inner classes require an instance of the outer class (Page 21)."
+  },
+  {
+    "id": 4,
+    "question": "What is the output?\n\nclass A {\n    A() { System.out.print(\"A\"); }\n}\nclass B extends A {\n    B() { System.out.print(\"B\"); }\n}\npublic class Test {\n    public static void main(String[] args) {\n        new B();\n    }\n}",
+    "option1": "AB",
+    "option2": "BA",
+    "option3": "A",
+    "option4": "B",
+    "answer": "option1",
+    "explanation": "Superclass constructor (A) is implicitly called before subclass (B) (Page 36)."
+  },
+  {
+    "id": 5,
+    "question": "Which statement about Java's `StringTokenizer` is false?",
+    "option1": "It breaks a String into tokens using delimiters.",
+    "option2": "The default delimiter is whitespace.",
+    "option3": "It implements the `Iterator` interface.",
+    "option4": "It is part of `java.util` package.",
+    "answer": "option3",
+    "explanation": "StringTokenizer does not implement `Iterator` (Page 56-57)."
+  },
+  {
+    "id": 6,
+    "question": "What is the output?\n\nclass Test {\n    public static void main(String[] args) {\n        StringBuffer sb = new StringBuffer(\"Hello\");\n        sb.append(\"World\").replace(1, 3, \"X\").reverse();\n        System.out.println(sb);\n    }\n}",
+    "option1": "dlroXHWo",
+    "option2": "dlroXHello",
+    "option3": "olleHXdlroW",
+    "option4": "Compile-time error",
+    "answer": "option1",
+    "explanation": "Chained operations: append → replace(1,3,\"X\") → reverse (Page 54-55)."
+  },
+  {
+    "id": 7,
+    "question": "Which access modifier allows visibility only within the same package and to subclasses in other packages?",
+    "option1": "private",
+    "option2": "default",
+    "option3": "protected",
+    "option4": "public",
+    "answer": "option3",
+    "explanation": "Protected members are visible within the package and to subclasses (Page 17)."
+  },
+  {
+    "id": 8,
+    "question": "What is the output?\n\nabstract class Bike {\n    abstract void run();\n    Bike() { System.out.print(\"Bike \"); }\n}\nclass Honda extends Bike {\n    void run() { System.out.print(\"Running \"); }\n}\npublic class Test {\n    public static void main(String[] args) {\n        new Honda().run();\n    }\n}",
+    "option1": "Running",
+    "option2": "Bike Running",
+    "option3": "Compile-time error",
+    "option4": "Bike",
+    "answer": "option2",
+    "explanation": "Abstract class constructor is called first (Page 45)."
+  },
+  {
+    "id": 9,
+    "question": "Which method is called by the JVM when `main(String[] args)` is overloaded?",
+    "option1": "The first `main()` method in the file.",
+    "option2": "The one with the lowest parameter count.",
+    "option3": "Only `main(String[] args)`.",
+    "option4": "All overloaded `main()` methods.",
+    "answer": "option3",
+    "explanation": "JVM only calls `main(String[] args)` (Page 3)."
+  },
+  {
+    "id": 10,
+    "question": "What is the output?\n\nclass Test {\n    static { System.out.print(\"Static \"); }\n    { System.out.print(\"Init \"); }\n    Test() { System.out.print(\"Constructor \"); }\n    public static void main(String[] args) {\n        new Test();\n    }\n}",
+    "option1": "Static Init Constructor",
+    "option2": "Init Constructor Static",
+    "option3": "Static Constructor Init",
+    "option4": "Constructor Init Static",
+    "answer": "option1",
+    "explanation": "Order: static block → instance block → constructor (Page 29)."
+  },
+  {
+    "id": 11,
+    "question": "What is the output of this code?\n\nclass Test {\n    static int x = 10;\n    { System.out.print(x + \" \"); }\n    static { x = 20; }\n    public static void main(String[] args) {\n        System.out.print(Test.x + \" \");\n        new Test();\n    }\n}",
+    "option1": "10 10",
+    "option2": "20 20",
+    "option3": "10 20",
+    "option4": "20 10",
+    "answer": "option2",
+    "explanation": "Static blocks execute before instance blocks. `x` is modified to 20 before any output."
+  },
+  {
+    "id": 12,
+    "question": "Which statement about this code is true?\n\nclass Outer {\n    private int x = 10;\n    class Inner {\n        void print() { System.out.println(x); }\n    }\n}",
+    "option1": "Fails to compile due to private access",
+    "option2": "Inner class cannot access outer class's private members",
+    "option3": "Compiles and can access x",
+    "option4": "Requires getter method for x",
+    "answer": "option3",
+    "explanation": "Inner classes can access all members of the outer class, including private (Page 18-21)."
+  },
+  {
+    "id": 13,
+    "question": "What is the result?\n\nclass A {\n    A() { System.out.print(\"A\"); }\n}\nclass B extends A {\n    B() { this(5); System.out.print(\"B\"); }\n    B(int x) { System.out.print(\"C\"); }\n}\npublic class Test {\n    public static void main(String[] args) {\n        new B();\n    }\n}",
+    "option1": "ACB",
+    "option2": "ABC",
+    "option3": "CAB",
+    "option4": "Compile error",
+    "answer": "option1",
+    "explanation": "Constructor chaining order: A() → B(5) → B(). Super() is implicitly called first."
+  },
+  {
+    "id": 14,
+    "question": "Which code snippet demonstrates correct use of super()?",
+    "option1": "class A { A(int x) {} }\nclass B extends A { B() { super(); } }",
+    "option2": "class A { A() {} }\nclass B extends A { B() { super(5); } }",
+    "option3": "class A { A(int x) {} }\nclass B extends A { B() {} }",
+    "option4": "class A { A() {} }\nclass B extends A { B() { super(); } }",
+    "answer": "option4",
+    "explanation": "super() must match parent constructor. Option 3 fails without explicit super(int)."
+  },
+  {
+    "id": 15,
+    "question": "What is the output?\n\nString s1 = new String(\"Java\");\nString s2 = s1.concat(\"Programming\");\nString s3 = s2.intern();\nSystem.out.println(s2 == s3);",
+    "option1": "true",
+    "option2": "false",
+    "option3": "Runtime exception",
+    "option4": "Compile error",
+    "answer": "option2",
+    "explanation": "intern() returns canonical string from pool, but s2 is a new object (Page 46-47)."
+  },
+  {
+    "id": 16,
+    "question": "Which scenario causes a compile-time error with final?",
+    "option1": "final class with a final method",
+    "option2": "final variable initialized in constructor",
+    "option3": "final method in a non-final class",
+    "option4": "final static variable not initialized",
+    "answer": "option4",
+    "explanation": "static final variables must be initialized at declaration or in static block (Page 24-25)."
+  },
+  {
+    "id": 17,
+    "question": "What is the output?\n\ninterface I { default void print() { System.out.print(\"I\"); } }\nclass A { public void print() { System.out.print(\"A\"); } }\nclass B extends A implements I {\n    public static void main(String[] args) { new B().print(); }\n}",
+    "option1": "I",
+    "option2": "A",
+    "option3": "Compile error: conflict",
+    "option4": "Runtime exception",
+    "answer": "option2",
+    "explanation": "Class methods take precedence over interface default methods."
+  },
+  {
+    "id": 18,
+    "question": "Which statement about StringBuffer is false?",
+    "option1": "Capacity grows by (oldcapacity*2)+2",
+    "option2": "Initial default capacity is 16",
+    "option3": "append() is thread-safe",
+    "option4": "reverse() modifies the original object",
+    "answer": "option3",
+    "explanation": "StringBuffer is thread-safe, but this is unrelated to append() behavior (Page 54-55)."
+  },
+  {
+    "id": 19,
+    "question": "What is the output?\n\nclass Test {\n    static void m(Object o) { System.out.print(\"Object\"); }\n    static void m(String s) { System.out.print(\"String\"); }\n    public static void main(String[] args) {\n        m(null);\n    }\n}",
+    "option1": "Object",
+    "option2": "String",
+    "option3": "Compile error",
+    "option4": "Runtime NullPointerException",
+    "answer": "option2",
+    "explanation": "Most specific method (String) is chosen for null."
+  },
+  {
+    "id": 20,
+    "question": "Which code block correctly uses this() and super()?",
+    "option1": "class A { A() { this(5); } A(int x) { super(); } }",
+    "option2": "class A { A() { super(); this(5); } A(int x) {} }",
+    "option3": "class A { A() { super(); } A(int x) { this(); } }",
+    "option4": "class A { A() { this(); } A(int x) { super(); } }",
+    "answer": "option1",
+    "explanation": "this() and super() must be the first statement, and cannot be used together."
+  },
+  {
+    "id": 21,
+    "question": "What is the output?\n\nclass Test {\n    static String str = \"Java\";\n    static { str = str + \"Programming\"; }\n    { str = \"Hello\"; }\n    public static void main(String[] args) {\n        System.out.print(str);\n    }\n}",
+    "option1": "Java",
+    "option2": "JavaProgramming",
+    "option3": "Hello",
+    "option4": "Compile error",
+    "answer": "option2",
+    "explanation": "Static blocks run before instance blocks. Instance block never executes here."
+  },
+  {
+    "id": 22,
+    "question": "Which access modifier combination is invalid for a nested class?",
+    "option1": "private static class",
+    "option2": "protected class",
+    "option3": "public abstract class",
+    "option4": "final private class",
+    "answer": "option2",
+    "explanation": "Nested classes cannot be protected (Page 18)."
+  },
+  {
+    "id": 23,
+    "question": "What is the output?\n\nclass Test {\n    public static void main(String[] args) {\n        String s1 = \"Java\";\n        String s2 = new String(\"Java\").intern();\n        System.out.println(s1 == s2);\n    }\n}",
+    "option1": "true",
+    "option2": "false",
+    "option3": "Runtime exception",
+    "option4": "Compile error",
+    "answer": "option1",
+    "explanation": "intern() returns the canonical string from the pool, making s1 and s2 refer to the same object."
+  },
+  {
+    "id": 24,
+    "question": "Which statement about abstract classes is false?",
+    "option1": "Can have constructors",
+    "option2": "Can have static methods",
+    "option3": "Can be final",
+    "option4": "Can have main() method",
+    "answer": "option3",
+    "explanation": "Abstract classes cannot be final (Page 43-45)."
+  },
+  {
+    "id": 25,
+    "question": "What is the output?\n\nclass Test {\n    static int count = 0;\n    Test() { count++; }\n    public static void main(String[] args) {\n        new Test();\n        new Test();\n        System.out.print(count);\n    }\n}",
+    "option1": "0",
+    "option2": "1",
+    "option3": "2",
+    "option4": "Compile error",
+    "answer": "option3",
+    "explanation": "Static variable count increments with each constructor call."
+  },
+  {
+    "id": 26,
+    "question": "Which code demonstrates polymorphism?",
+    "option1": "Overriding equals() and hashCode()",
+    "option2": "Overloading + operator for String concatenation",
+    "option3": "Using instanceof to check type",
+    "option4": "Declaring a variable as List<String> list = new ArrayList<>()",
+    "answer": "option4",
+    "explanation": "Runtime polymorphism via interface reference (Page 40-42)."
+  },
+  {
+    "id": 27,
+    "question": "What is the output?\n\nclass Test {\n    String str = \"Java\";\n    void modify(String s) { s = \"Programming\"; }\n    public static void main(String[] args) {\n        Test t = new Test();\n        t.modify(t.str);\n        System.out.print(t.str);\n    }\n}",
+    "option1": "Java",
+    "option2": "Programming",
+    "option3": "Null",
+    "option4": "Compile error",
+    "answer": "option1",
+    "explanation": "Strings are immutable. Method modifies local copy, not original reference."
+  },
+  {
+    "id": 28,
+    "question": "Which StringTokenizer constructor makes delimiters tokens?",
+    "option1": "new StringTokenizer(str, delim)",
+    "option2": "new StringTokenizer(str, delim, true)",
+    "option3": "new StringTokenizer(str, delim, false)",
+    "option4": "new StringTokenizer(str)",
+    "answer": "option2",
+    "explanation": "Third parameter as true includes delimiters as tokens (Page 56-57)."
+  },
+  {
+    "id": 29,
+    "question": "What is the output?\n\nclass Test {\n    static void m(int x) { System.out.print(\"int\"); }\n    static void m(Integer x) { System.out.print(\"Integer\"); }\n    public static void main(String[] args) {\n        m(5);\n    }\n}",
+    "option1": "int",
+    "option2": "Integer",
+    "option3": "Compile error",
+    "option4": "Runtime exception",
+    "answer": "option1",
+    "explanation": "Primitive takes precedence over autoboxing in overloading."
+  },
+  {
+    "id": 30,
+    "question": "Which statement about static nested classes is true?",
+    "option1": "Can access outer class instance variables directly",
+    "option2": "Requires an outer class instance",
+    "option3": "Can be abstract",
+    "option4": "Cannot be private",
+    "answer": "option3",
+    "explanation": "Static nested classes can be abstract (Page 19-20)."
+  },
+  {
+    "id": 31,
+    "question": "What is the output?\n\nclass A {\n    static { System.out.print(\"A\"); }\n    A() { System.out.print(\"B\"); }\n}\nclass B extends A {\n    static { System.out.print(\"C\"); }\n    B() { System.out.print(\"D\"); }\n}\nclass Test {\n    public static void main(String[] args) {\n        new B();\n    }\n}",
+    "option1": "ABCD",
+    "option2": "ACBD",
+    "option3": "CABD",
+    "option4": "Compile error",
+    "answer": "option2",
+    "explanation": "Static blocks execute in order of class loading. A loads first, then B. Then constructors execute A → B."
+  },
+  {
+    "id": 32,
+    "question": "Which of the following is TRUE about constructor overloading?",
+    "option1": "Constructors can be overloaded based only on return type.",
+    "option2": "Constructors cannot be overloaded.",
+    "option3": "Constructors can be overloaded with different parameter lists.",
+    "option4": "Only one constructor is allowed in a class.",
+    "answer": "option3",
+    "explanation": "Constructors can be overloaded using different parameter types or numbers."
+  },
+  {
+    "id": 33,
+    "question": "Which statement about static blocks is FALSE?",
+    "option1": "Executed only once during class loading",
+    "option2": "Can initialize static variables",
+    "option3": "Can access non-static members directly",
+    "option4": "Can be used to print values before main() runs",
+    "answer": "option3",
+    "explanation": "Static blocks cannot directly access non-static members."
+  },
+  {
+    "id": 34,
+    "question": "What is the output?\n\nclass A {\n    final void show() { System.out.print(\"A\"); }\n}\nclass B extends A {\n    void show() { System.out.print(\"B\"); }\n    public static void main(String[] args) {\n        new B().show();\n    }\n}",
+    "option1": "A",
+    "option2": "B",
+    "option3": "Compile-time error",
+    "option4": "Runtime error",
+    "answer": "option3",
+    "explanation": "Final methods cannot be overridden. Compilation fails."
+  },
+  {
+    "id": 35,
+    "question": "Can an abstract class contain a constructor?",
+    "option1": "Yes",
+    "option2": "No",
+    "option3": "Only if it has abstract methods",
+    "option4": "Only in interfaces",
+    "answer": "option1",
+    "explanation": "Abstract classes can contain constructors to initialize data members."
+  },
+  {
+    "id": 36,
+    "question": "What happens if you call a static method using an object reference?",
+    "option1": "It causes a runtime exception",
+    "option2": "It will not compile",
+    "option3": "The static method runs normally",
+    "option4": "It calls the object's instance method instead",
+    "answer": "option3",
+    "explanation": "Static methods can be called through object references, but it's discouraged."
+  },
+  {
+    "id": 37,
+    "question": "Which method is chosen if both overloaded and overridden methods are available?",
+    "option1": "Overridden",
+    "option2": "Overloaded",
+    "option3": "Depends on reference type",
+    "option4": "None will be called",
+    "answer": "option1",
+    "explanation": "Overridden methods are resolved at runtime (polymorphism)."
+  },
+  {
+    "id": 38,
+    "question": "What will be the output?\n\nclass A {\n  static final int data;\n  static { data = 99; }\n  public static void main(String[] args) {\n    System.out.print(data);\n  }\n}",
+    "option1": "0",
+    "option2": "Compile-time error",
+    "option3": "99",
+    "option4": "Runtime error",
+    "answer": "option3",
+    "explanation": "Static blank final variable is initialized in static block."
+  },
+  {
+    "id": 39,
+    "question": "Can an inner class be declared static?",
+    "option1": "Yes, only for anonymous classes",
+    "option2": "Yes, if it's a nested static class",
+    "option3": "No, inner classes can't be static",
+    "option4": "Yes, but only if final",
+    "answer": "option2",
+    "explanation": "Static nested classes can be declared inside outer classes."
+  },
+  {
+    "id": 40,
+    "question": "Which of these violates Java's constructor chaining rules?",
+    "option1": "Using both this() and super() in same constructor",
+    "option2": "Calling another constructor in same class",
+    "option3": "Calling super() from first line",
+    "option4": "Not calling this() or super() explicitly",
+    "answer": "option1",
+    "explanation": "this() and super() cannot appear in the same constructor."
+  },
+  {
+    "id": 41,
+    "question": "Which statement about inner classes is correct?",
+    "option1": "Static inner classes can access instance members directly",
+    "option2": "Inner classes cannot be static",
+    "option3": "Inner class can access private members of outer class",
+    "option4": "Inner class cannot be created inside methods",
+    "answer": "option3",
+    "explanation": "Inner classes (non-static) can access all members, including private ones, of their enclosing class."
+  },
+  {
+    "id": 42,
+    "question": "What is the output?\n\nclass Test {\n  static int x = 5;\n  static { x += 10; }\n  public static void main(String[] args) {\n    System.out.println(x);\n  }\n}",
+    "option1": "5",
+    "option2": "10",
+    "option3": "15",
+    "option4": "0",
+    "answer": "option3",
+    "explanation": "Static block adds 10 to x. Final value = 15."
+  },
+  {
+    "id": 43,
+    "question": "Which statement is TRUE about `super()`?",
+    "option1": "It must be the last statement in a constructor",
+    "option2": "It can only be used once in a constructor",
+    "option3": "It can be used outside constructors",
+    "option4": "It overrides the parent's constructor",
+    "answer": "option2",
+    "explanation": "super() must be the first statement and can only be used once."
+  },
+  {
+    "id": 44,
+    "question": "What happens if a subclass does not override an abstract method?",
+    "option1": "Runtime exception",
+    "option2": "Nothing, it inherits the method",
+    "option3": "Compile-time error",
+    "option4": "Abstract class becomes final",
+    "answer": "option3",
+    "explanation": "Subclass must override all abstract methods or itself be abstract."
+  },
+  {
+    "id":45,
+    "question": "Can `this()` and `super()` both be used in the same constructor?",
+    "option1": "Yes, in any order",
+    "option2": "No, Java restricts using both",
+    "option3": "Yes, if one is in an if block",
+    "option4": "Yes, in static context",
+    "answer": "option2",
+    "explanation": "Either `this()` or `super()` must be first; both cannot be used together."
+  },
+  {
+    "id": 46,
+    "question": "What is the default capacity of `StringBuffer`?",
+    "option1": "8",
+    "option2": "16",
+    "option3": "32",
+    "option4": "0",
+    "answer": "option2",
+    "explanation": "Default capacity is 16 characters (unless initialized otherwise)."
+  },
+  {
+    "id": 47,
+    "question": "What is the output?\n\nclass A {\n    static int count;\n    A() { count++; }\n    public static void main(String[] args) {\n        new A(); new A();\n        System.out.print(count);\n    }\n}",
+    "option1": "1",
+    "option2": "0",
+    "option3": "2",
+    "option4": "Compile error",
+    "answer": "option3",
+    "explanation": "Static variable 'count' is shared among all instances; value becomes 2."
+  },
+  {
+    "id": 48,
+    "question": "Which of the following can be static in Java?",
+    "option1": "Top-level class",
+    "option2": "Constructor",
+    "option3": "Local variable",
+    "option4": "Inner class",
+    "answer": "option4",
+    "explanation": "Only nested (inner) classes can be static; constructors and local vars can't."
+  },
+  {
+    "id": 49,
+    "question": "Which keyword is used to prevent method overriding?",
+    "option1": "final",
+    "option2": "static",
+    "option3": "private",
+    "option4": "abstract",
+    "answer": "option1",
+    "explanation": "`final` prevents method overriding."
+  },
+  {
+    "id": 50,
+    "question": "What will happen?\n\nclass Test {\n  Test() { System.out.println(\"A\"); }\n  Test(int x) { this(); System.out.println(\"B\"); }\n  public static void main(String[] args) { new Test(5); }\n}",
+    "option1": "A",
+    "option2": "B",
+    "option3": "AB",
+    "option4": "BA",
+    "answer": "option3",
+    "explanation": "`this()` calls the no-arg constructor, so A prints first, then B."
+  }
+]

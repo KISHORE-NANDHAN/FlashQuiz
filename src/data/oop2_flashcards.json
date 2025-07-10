@@ -1,0 +1,254 @@
+[
+  {
+    "id": 1,
+    "description": "Method Overloading with Type Promotion",
+    "output": "class Calc {\n  void sum(int a, long b) { System.out.println(a + b); }\n  void sum(int a, int b, int c) { System.out.println(a + b + c); }\n}\n\nCalc obj = new Calc();\nobj.sum(20, 20); // Output: 40 (int promoted to long)\nobj.sum(20, 20, 20); // Output: 60"
+  },
+  {
+    "id": 2,
+    "description": "Constructor Chaining with `this()`",
+    "output": "class Student {\n  Student() { this(10); System.out.print(\"A\"); }\n  Student(int x) { System.out.print(\"B\"); }\n}\nnew Student(); // Output: BA"
+  },
+  {
+    "id": 3,
+    "description": "Static Nested Class Access",
+    "output": "class Outer {\n  static int x = 10;\n  static class Inner {\n    void print() { System.out.println(x); }\n  }\n}\nOuter.Inner obj = new Outer.Inner();\nobj.print(); // Output: 10"
+  },
+  {
+    "id": 4,
+    "description": "String vs. StringBuffer Mutability",
+    "output": "String s = \"Hello\";\ns.concat(\" World\");\nSystem.out.println(s); // Output: Hello (Immutable)\n\nStringBuffer sb = new StringBuffer(\"Hello\");\nsb.append(\" World\");\nSystem.out.println(sb); // Output: Hello World (Mutable)"
+  },
+  {
+    "id": 5,
+    "description": "Dynamic Method Dispatch (Runtime Polymorphism)",
+    "output": "class Animal { void eat() { System.out.print(\"Animal\"); } }\nclass Dog extends Animal { void eat() { System.out.print(\"Dog\"); } }\nAnimal a = new Dog();\na.eat(); // Output: Dog"
+  },
+  {
+    "id": 6,
+    "description": "Blank Final Variable Initialization",
+    "output": "class Test {\n  final int x;\n  Test() { x = 100; System.out.println(x); }\n}\nnew Test(); // Output: 100"
+  },
+  {
+    "id": 7,
+    "description": "Command-Line Arguments Parsing",
+    "output": "public class Main {\n  public static void main(String[] args) {\n    int sum = Integer.parseInt(args[0]) + Integer.parseInt(args[1]);\n    System.out.println(sum);\n  }\n}\n// Run: java Main 5 10\n// Output: 15"
+  },
+  {
+    "id": 8,
+    "description": "Anonymous Inner Class",
+    "output": "interface Greet { void sayHello(); }\nGreet g = new Greet() {\n  public void sayHello() { System.out.println(\"Hello\"); }\n};\ng.sayHello(); // Output: Hello"
+  },
+  {
+    "id": 9,
+    "description": "StringTokenizer Delimiters",
+    "output": "StringTokenizer st = new StringTokenizer(\"A,B,C\", \",\");\nwhile (st.hasMoreTokens()) {\n  System.out.println(st.nextToken());\n}\n// Output: A\n//         B\n//         C"
+  },
+  {
+    "id": 10,
+    "description": "Abstract Class with Concrete Methods",
+    "output": "abstract class Shape {\n  abstract void draw();\n  void resize() { System.out.println(\"Resizing\"); }\n}\nclass Circle extends Shape {\n  void draw() { System.out.println(\"Drawing Circle\"); }\n}\nnew Circle().resize(); // Output: Resizing"
+  },
+  {
+    "id": 11,
+    "description": "Static Block vs Instance Block Execution Order",
+    "output": "class Test {\n  static { System.out.print(\"Static \"); }\n  { System.out.print(\"Instance \"); }\n  Test() { System.out.print(\"Constructor \"); }\n  public static void main(String[] args) {\n    new Test();\n  }\n}\n// Output: Static Instance Constructor"
+  },
+  {
+    "id": 12,
+    "description": "Covariant Return Types in Overriding",
+    "output": "class A { Object get() { return null; } }\nclass B extends A {\n  @Override\n  String get() { return \"Covariant\"; }\n}\n// Valid: Subclass can narrow return type"
+  },
+  {
+    "id": 13,
+    "description": "Anonymous Inner Class Extending Class",
+    "output": "class A { void print() { System.out.print(\"A\"); } }\nA obj = new A() {\n  void print() { System.out.print(\"Anonymous\"); }\n};\nobj.print(); // Output: Anonymous"
+  },
+  {
+    "id": 14,
+    "description": "String Literal vs new String() Memory",
+    "output": "String s1 = \"Java\";\nString s2 = new String(\"Java\");\nSystem.out.println(s1 == s2.intern()); // Output: true"
+  },
+  {
+    "id": 15,
+    "description": "Private Constructor in Abstract Class",
+    "output": "abstract class A {\n  private A() {}\n  static class B extends A {}\n}\n// Valid: Nested class can extend abstract class with private constructor"
+  },
+  {
+    "id": 16,
+    "description": "Method Overloading with Autoboxing/Widening",
+    "output": "class Test {\n  void m(long x) { System.out.print(\"long\"); }\n  void m(Integer x) { System.out.print(\"Integer\"); }\n  public static void main(String[] args) {\n    new Test().m(5); // Output: long (Widening beats autoboxing)"
+  },
+  {
+    "id": 17,
+    "description": "Final Static Variable Initialization",
+    "output": "class Test {\n  final static int x;\n  static { x = 10; }\n}\n// Valid: final static can be initialized in static block"
+  },
+  {
+    "id": 18,
+    "description": "Recursive Constructor Invocation",
+    "output": "class A {\n  A() { this(5); }\n  A(int x) { this(); }\n}\n// Compile Error: Recursive constructor invocation"
+  },
+  {
+    "id": 19,
+    "description": "Interface Default Method Conflict",
+    "output": "interface I1 { default void m() {} }\ninterface I2 { default void m() {} }\nclass C implements I1, I2 {\n  @Override\n  public void m() { I1.super.m(); }\n}\n// Must override conflicting default methods"
+  },
+  {
+    "id": 20,
+    "description": "Static Method Hiding (Not Overriding)",
+    "output": "class A { static void m() { System.out.print(\"A\"); } }\nclass B extends A { static void m() { System.out.print(\"B\"); } }\nA obj = new B();\nobj.m(); // Output: A (Static methods don't override)"
+  },
+  {
+    "id": 21,
+    "description": "StringBuffer Capacity Growth",
+    "output": "StringBuffer sb = new StringBuffer();\nsb.append(\"1234567890123456\");\nSystem.out.println(sb.capacity()); // Output: 16 (default)\nsb.append(\"1\");\nSystem.out.println(sb.capacity()); // Output: 34 (oldcapacity*2 + 2)"
+  },
+  {
+    "id": 22,
+    "description": "Enum in Abstract Class",
+    "output": "abstract class A {\n  enum Color { RED, GREEN }\n}\n// Valid: Enums can be declared inside abstract classes"
+  },
+  {
+    "id": 23,
+    "description": "Instance Initializer Block with Return",
+    "output": "class A {\n  { if (true) return; System.out.print(\"Unreachable\"); }\n}\n// Valid: return is allowed in instance blocks"
+  },
+  {
+    "id": 24,
+    "description": "Polymorphic Exception Throwing",
+    "output": "class A { void m() throws IOException {} }\nclass B extends A {\n  @Override\n  void m() throws FileNotFoundException {}\n}\n// Valid: Subclass can throw narrower exceptions"
+  },
+  {
+    "id": 25,
+    "description": "Static Context in Inner Classes",
+    "output": "class Outer {\n  int x = 10;\n  static class Inner {\n    void print() { System.out.println(new Outer().x); }\n  }\n}\n// Valid: Static nested class can access instance vars via outer object"
+  },
+  {
+    "id": 26,
+    "description": "Finalize() Call Guarantee",
+    "output": "class A {\n  @Override\n  protected void finalize() { System.out.print(\"Finalized\"); }\n}\n// No guarantee if/when finalize() will execute"
+  },
+  {
+    "id": 27,
+    "description": "Lambda vs Anonymous Inner Class",
+    "output": "Runnable r1 = () -> System.out.print(\"Lambda\");\nRunnable r2 = new Runnable() {\n  public void run() { System.out.print(\"Anonymous\"); }\n};\n// Lambdas are not syntactic sugar for anonymous classes"
+  },
+  {
+    "id": 28,
+    "description": "Thread-Safety of StringBuffer",
+    "output": "StringBuffer sb = new StringBuffer();\n// All methods are synchronized (thread-safe)"
+  },
+  {
+    "id": 29,
+    "description": "Varargs and Overloading",
+    "output": "class Test {\n  void m(int... x) { System.out.print(\"Varargs\"); }\n  void m(int x) { System.out.print(\"int\"); }\n  public static void main(String[] args) {\n    new Test().m(5); // Output: int (Exact match preferred)"
+  },
+  {
+    "id": 30,
+    "description": "SerialVersionUID in Abstract Class",
+    "output": "abstract class A implements Serializable {\n  private static final long serialVersionUID = 1L;\n}\n// Valid: Abstract classes can be Serializable"
+  },
+  {
+    "id": 31,
+    "description": "Static Block Execution Order",
+    "output": "class Demo {\n  static { System.out.println(\"Static block\"); }\n  public static void main(String[] args) {\n    System.out.println(\"Main method\");\n  }\n}\n// Output: Static block\n//         Main method"
+  },
+  {
+    "id": 32,
+    "description": "Abstract Class with Constructor",
+    "output": "abstract class A {\n  A() { System.out.println(\"Constructor in abstract class\"); }\n}\nclass B extends A {\n  B() { System.out.println(\"Constructor in B\"); }\n}\nnew B();\n// Output: Constructor in abstract class\n//         Constructor in B"
+  },
+  {
+    "id": 33,
+    "description": "Accessing Superclass Variable",
+    "output": "class A {\n  int x = 10;\n}\nclass B extends A {\n  int x = 20;\n  void show() {\n    System.out.println(super.x);\n  }\n}\n// Output: 10"
+  },
+  {
+    "id": 34,
+    "description": "Illegal Use of super() and this()",
+    "output": "class A {\n  A() { this(5); super(); } // Compile Error\n  A(int x) {}\n}\n// Error: Cannot use both this() and super()"
+  },
+  {
+    "id": 35,
+    "description": "Overloading vs Overriding Behavior",
+    "output": "class A {\n  void show(int x) { System.out.println(\"int\"); }\n}\nclass B extends A {\n  void show(String s) { System.out.println(\"String\"); }\n}\nnew B().show(\"Hi\");\n// Output: String"
+  },
+  {
+    "id": 36,
+    "description": "Static Method Hiding",
+    "output": "class A {\n  static void show() { System.out.println(\"A\"); }\n}\nclass B extends A {\n  static void show() { System.out.println(\"B\"); }\n}\nA obj = new B();\nobj.show(); // Output: A"
+  },
+  {
+    "id": 37,
+    "description": "Blank Final Variable in Constructor",
+    "output": "class Demo {\n  final int x;\n  Demo() { x = 42; System.out.println(x); }\n}\nnew Demo(); // Output: 42"
+  },
+  {
+    "id": 38,
+    "description": "Instance Block Execution Order",
+    "output": "class A {\n  { System.out.println(\"Instance Block\"); }\n  A() { System.out.println(\"Constructor\"); }\n}\n// Output: Instance Block\n//         Constructor"
+  },
+  {
+    "id": 39,
+    "description": "Calling Parent Method using super",
+    "output": "class A { void msg() { System.out.println(\"A\"); } }\nclass B extends A {\n  void msg() { super.msg(); System.out.println(\"B\"); }\n}\n// Output: A\n//         B"
+  },
+  {
+    "id": 40,
+    "description": "Access Modifier Restriction in Overriding",
+    "output": "class A { protected void msg() {} }\nclass B extends A { private void msg() {} }\n// Compile Error: Cannot reduce visibility"
+  },
+  {
+    "id": 41,
+    "description": "Static Method Access via Object",
+    "output": "class Demo {\n  static void show() { System.out.println(\"Static\"); }\n}\nDemo obj = new Demo();\nobj.show(); // Output: Static (though not recommended)"
+  },
+  {
+    "id": 42,
+    "description": "Nested Class Static Declaration",
+    "output": "class Outer {\n  static class Inner { void display() { System.out.println(\"Nested Static\"); } }\n}\nOuter.Inner obj = new Outer.Inner();\nobj.display();"
+  },
+  {
+    "id": 43,
+    "description": "Calling super constructor with parameter",
+    "output": "class A {\n  A(int x) { System.out.println(x); }\n}\nclass B extends A {\n  B() { super(5); }\n}\nnew B(); // Output: 5"
+  },
+  {
+    "id": 44,
+    "description": "Overriding vs Overloading",
+    "output": "class A {\n  void show() { System.out.println(\"A\"); }\n}\nclass B extends A {\n  void show(String s) { System.out.println(s); }\n}\n// Overloading, not overriding"
+  },
+  {
+    "id": 45,
+    "description": "Abstract Method in Abstract Class",
+    "output": "abstract class A {\n  abstract void run();\n}\nclass B extends A {\n  void run() { System.out.println(\"Running\"); }\n}\nnew B().run(); // Output: Running"
+  },
+  {
+    "id": 46,
+    "description": "Using this() in Constructor",
+    "output": "class Demo {\n  Demo() { this(5); System.out.println(\"Default\"); }\n  Demo(int x) { System.out.println(\"Param\"); }\n}\nnew Demo(); // Output: Param Default"
+  },
+  {
+    "id": 47,
+    "description": "Superclass Method Access",
+    "output": "class Parent {\n  void display() { System.out.println(\"Parent\"); }\n}\nclass Child extends Parent {\n  void show() { super.display(); }\n}"
+  },
+  {
+    "id": 48,
+    "description": "Multiple Constructors Overload",
+    "output": "class Demo {\n  Demo() {}\n  Demo(int x) {}\n  Demo(String s) {}\n}\n// Valid constructor overloading"
+  },
+  {
+    "id": 49,
+    "description": "Final Class Behavior",
+    "output": "final class A {}\nclass B extends A {} // Compile-time error: Cannot extend final class"
+  },
+  {
+    "id": 50,
+    "description": "Static Block Before Main",
+    "output": "class Demo {\n  static { System.out.println(\"Static Block\"); }\n  public static void main(String[] args) {\n    System.out.println(\"Main\");\n  }\n}\n// Output: Static Block\n//         Main"
+  }
+
+
+]

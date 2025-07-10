@@ -1,0 +1,191 @@
+[
+  {
+    "question": "Which programming paradigm emphasizes the sequence of instructions executed by a computer?",
+    "option1": "Declarative programming",
+    "option2": "Object-oriented programming",
+    "option3": "Imperative programming",
+    "option4": "Functional programming",
+    "answer": "option3",
+    "explanation": "Imperative programming defines step-by-step instructions to control the flow of the program."
+  },
+  {
+    "question": "What does the term 'object' represent in object-oriented programming?",
+    "option1": "A procedure that contains instructions",
+    "option2": "An entity with state and behavior",
+    "option3": "A block of memory",
+    "option4": "A programming error",
+    "answer": "option2",
+    "explanation": "An object is an instance of a class that encapsulates data and behavior."
+  },
+  {
+    "question": "Which feature of OOP allows a new class to derive properties and behaviors from an existing class?",
+    "option1": "Encapsulation",
+    "option2": "Abstraction",
+    "option3": "Inheritance",
+    "option4": "Polymorphism",
+    "answer": "option3",
+    "explanation": "Inheritance enables a class to reuse fields and methods of another class."
+  },
+  {
+    "question": "Which access specifier allows class members to be accessed only within the same class?",
+    "option1": "Public",
+    "option2": "Private",
+    "option3": "Protected",
+    "option4": "Default",
+    "answer": "option2",
+    "explanation": "Private members are only accessible within the class they are defined."
+  },
+  {
+    "question": "Which of these is not a type of inheritance supported in Java?",
+    "option1": "Single",
+    "option2": "Multilevel",
+    "option3": "Multiple using interfaces",
+    "option4": "Multiple using classes",
+    "answer": "option4",
+    "explanation": "Java doesn't support multiple inheritance using classes to avoid ambiguity."
+  },
+  {
+    "question": "What is the default value of a boolean in Java?",
+    "option1": "0",
+    "option2": "1",
+    "option3": "false",
+    "option4": "null",
+    "answer": "option3",
+    "explanation": "Boolean in Java defaults to false if uninitialized."
+  },
+  {
+    "question": "Which of the following best represents the concept of encapsulation?",
+    "option1": "Inheritance of data",
+    "option2": "Binding data and methods together",
+    "option3": "Accessing private data directly",
+    "option4": "Sharing methods across classes",
+    "answer": "option2",
+    "explanation": "Encapsulation means combining data and code into a single unit."
+  },
+  {
+    "question": "Which of the following provides a platform-independent execution in Java?",
+    "option1": "Compiler",
+    "option2": "Operating System",
+    "option3": "Bytecode",
+    "option4": "Assembler",
+    "answer": "option3",
+    "explanation": "Java bytecode runs on JVMs, enabling platform-independent execution."
+  },
+  {
+    "question": "In which memory area are Java objects stored?",
+    "option1": "Stack",
+    "option2": "Heap",
+    "option3": "Register",
+    "option4": "Static",
+    "answer": "option2",
+    "explanation": "All objects in Java are stored in the heap memory."
+  },
+  {
+    "question": "What does the 'new' keyword do in Java?",
+    "option1": "Calls a method",
+    "option2": "Allocates memory for an object",
+    "option3": "Returns current object",
+    "option4": "Deletes an object",
+    "answer": "option2",
+    "explanation": "The 'new' keyword is used to create an object and allocate memory."
+  },
+  {
+    "question": "What is the result of 10 << 2 in Java?",
+    "option1": "20",
+    "option2": "30",
+    "option3": "40",
+    "option4": "50",
+    "answer": "option3",
+    "explanation": "10 << 2 means 10 * 2^2 = 40."
+  },
+  {
+    "question": "Which Java feature allows executing different implementations of a method?",
+    "option1": "Inheritance",
+    "option2": "Encapsulation",
+    "option3": "Polymorphism",
+    "option4": "Abstraction",
+    "answer": "option3",
+    "explanation": "Polymorphism allows one method to have multiple implementations."
+  },
+  {
+    "question": "Which of the following is a valid Java keyword?",
+    "option1": "method",
+    "option2": "procedure",
+    "option3": "volatile",
+    "option4": "define",
+    "answer": "option3",
+    "explanation": "'volatile' is a reserved keyword in Java."
+  },
+  {
+    "question": "Which paradigm does Java mainly follow?",
+    "option1": "Procedural",
+    "option2": "Functional",
+    "option3": "Object-oriented",
+    "option4": "Declarative",
+    "answer": "option3",
+    "explanation": "Java is a class-based object-oriented programming language."
+  },
+  {
+    "question": "Which concept hides the internal implementation and shows only necessary details?",
+    "option1": "Polymorphism",
+    "option2": "Inheritance",
+    "option3": "Encapsulation",
+    "option4": "Abstraction",
+    "answer": "option4",
+    "explanation": "Abstraction hides complexity and shows only essential features."
+  },
+  {
+    "question": "Which section in a Java program typically contains single-line or multiline comments?",
+    "option1": "Package declaration",
+    "option2": "Import section",
+    "option3": "Documentation section",
+    "option4": "Class definition",
+    "answer": "option3",
+    "explanation": "Documentation section is used for writing comments in the program."
+  },
+  {
+    "question": "What is the access mode where a class can access members within itself and derived classes only?",
+    "option1": "Public",
+    "option2": "Private",
+    "option3": "Protected",
+    "option4": "Default",
+    "answer": "option3",
+    "explanation": "Protected access allows visibility in the class and subclasses."
+  },
+  {
+    "question": "Which of the following loops is guaranteed to execute at least once?",
+    "option1": "for",
+    "option2": "while",
+    "option3": "do-while",
+    "option4": "foreach",
+    "answer": "option3",
+    "explanation": "do-while checks the condition after execution of the loop body."
+  },
+  {
+    "question": "Which Java feature helps to remove unused objects from memory automatically?",
+    "option1": "Garbage collection",
+    "option2": "Final keyword",
+    "option3": "Stack management",
+    "option4": "Inheritance",
+    "answer": "option1",
+    "explanation": "Java's garbage collector cleans up unused objects from heap."
+  },
+  {
+    "question": "Which OOP principle allows binding of data and functions operating on the data?",
+    "option1": "Polymorphism",
+    "option2": "Abstraction",
+    "option3": "Encapsulation",
+    "option4": "Inheritance",
+    "answer": "option3",
+    "explanation": "Encapsulation combines data and functions into a single unit."
+  },
+  {
+    "question": "Which keyword is used in Java to define a class?",
+    "option1": "define",
+    "option2": "structure",
+    "option3": "class",
+    "option4": "object",
+    "answer": "option3",
+    "explanation": "Java uses the 'class' keyword to define a class structure."
+  }
+]

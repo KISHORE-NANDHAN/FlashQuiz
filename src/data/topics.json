@@ -9,11 +9,19 @@
     "description": "Basic aptitude questions covering math, logic, and reasoning"
   },
   {
-    "id": "java-oop",
+    "id": "java-oop1",
     "type": "quiz",
-    "title": "Java OOP",
+    "title": "Java OOP-1",
     "category": "programming",
-    "file": "java_oop.json",
+    "file": "oop1_quiz.json",
+    "description": "Object-oriented programming concepts in Java"
+  },
+  {
+    "id": "java-oop2",
+    "type": "quiz",
+    "title": "Java OOP-2",
+    "category": "programming",
+    "file": "oop2_quiz.json",
     "description": "Object-oriented programming concepts in Java"
   },
   {
