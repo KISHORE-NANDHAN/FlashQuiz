@@ -1,11 +1,12 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@/contexts/ThemeContext';
-import { Moon, Sun, BookOpen, Brain, Code, Calculator } from 'lucide-react';
+import { useUser } from '@/contexts/UserContext';
+import { Moon, Sun, BookOpen, Brain, Code, Calculator, User } from 'lucide-react';
+import UserRegistrationModal from '@/components/UserRegistrationModal';
 import topicsData from '@/data/topics.json';
 
 interface Topic {
@@ -21,8 +22,16 @@ const HomePage = () => {
   const [topics] = useState<Topic[]>(topicsData as Topic[]);
   const [filter, setFilter] = useState<'all' | 'quiz' | 'flashcard'>('all');
   const [categoryFilter, setCategoryFilter] = useState<'all' | 'general' | 'programming'>('all');
+  const [showRegistrationModal, setShowRegistrationModal] = useState(false);
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
+  const { userDetails, isUserRegistered, clearUserDetails } = useUser();
+
+  useEffect(() => {
+    if (!isUserRegistered) {
+      setShowRegistrationModal(true);
+    }
+  }, [isUserRegistered]);
 
   const filteredTopics = topics.filter(topic => {
     const typeMatch = filter === 'all' || topic.type === filter;
@@ -46,6 +55,11 @@ const HomePage = () => {
   };
 
   const handleTopicClick = (topic: Topic) => {
+    if (!isUserRegistered) {
+      setShowRegistrationModal(true);
+      return;
+    }
+    
     if (topic.type === 'quiz') {
       navigate(`/quiz/${topic.id}`);
     } else {
@@ -65,15 +79,33 @@ const HomePage = () => {
             <p className="text-gray-600 dark:text-gray-300">
               Interactive quizzes and flashcards for learning
             </p>
+            {isUserRegistered && (
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                Welcome back, {userDetails?.name}!
+              </p>
+            )}
           </div>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={toggleTheme}
-            className="rounded-full"
-          >
-            {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-          </Button>
+          <div className="flex items-center gap-2">
+            {isUserRegistered && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={clearUserDetails}
+                title="Switch User"
+              >
+                <User className="w-4 h-4 mr-2" />
+                Switch User
+              </Button>
+            )}
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={toggleTheme}
+              className="rounded-full"
+            >
+              {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+            </Button>
+          </div>
         </div>
 
         {/* Filters */}
@@ -170,6 +202,11 @@ const HomePage = () => {
           </div>
         )}
       </div>
+
+      <UserRegistrationModal 
+        isOpen={showRegistrationModal} 
+        onClose={() => setShowRegistrationModal(false)} 
+      />
     </div>
   );
 };

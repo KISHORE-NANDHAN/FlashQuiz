@@ -3,11 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Home, Download, Trophy, Clock, Target, User, Star } from 'lucide-react';
+import { Home, Download, Trophy, Clock, Target, Star } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useUser } from '@/contexts/UserContext';
 import CodeHighlighter from '@/components/CodeHighlighter';
 import jsPDF from 'jspdf';
 
@@ -27,17 +26,11 @@ interface SavedResults {
   totalQuestions: number;
 }
 
-interface UserDetails {
-  name: string;
-  email: string;
-}
-
 const ResultsPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { userDetails, isUserRegistered } = useUser();
   const [savedResults, setSavedResults] = useState<SavedResults | null>(null);
-  const [userDetails, setUserDetails] = useState<UserDetails>({ name: '', email: '' });
-  const [showUserForm, setShowUserForm] = useState(true);
   const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
@@ -48,6 +41,12 @@ const ResultsPage = () => {
       navigate('/');
     }
   }, [navigate]);
+
+  useEffect(() => {
+    if (!isUserRegistered) {
+      navigate('/');
+    }
+  }, [isUserRegistered, navigate]);
 
   useEffect(() => {
     if (showAlert) {
@@ -84,10 +83,10 @@ const ResultsPage = () => {
   };
 
   const generatePDF = () => {
-    if (!savedResults || !userDetails.name) {
+    if (!savedResults || !userDetails?.name) {
       toast({
         title: "Missing Information",
-        description: "Please enter your name before generating the report",
+        description: "User information is required to generate the report",
         variant: "destructive"
       });
       return;
@@ -104,7 +103,9 @@ const ResultsPage = () => {
     // User details
     doc.setFontSize(12);
     doc.text(`Name: ${userDetails.name}`, 20, 50);
-    doc.text(`Email: ${userDetails.email}`, 20, 60);
+    if (userDetails.email) {
+      doc.text(`Email: ${userDetails.email}`, 20, 60);
+    }
     doc.text(`Topic: ${savedResults.topicTitle}`, 20, 70);
     doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 80);
     
@@ -163,20 +164,7 @@ const ResultsPage = () => {
     });
   };
 
-  const handleUserFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (userDetails.name.trim()) {
-      setShowUserForm(false);
-    } else {
-      toast({
-        title: "Name Required",
-        description: "Please enter your name to continue",
-        variant: "destructive"
-      });
-    }
-  };
-
-  if (!savedResults) {
+  if (!savedResults || !userDetails) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <div className="text-center">
@@ -195,226 +183,182 @@ const ResultsPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 dark:from-gray-900 dark:to-gray-800 p-4">
       <div className="container mx-auto max-w-4xl">
-        {/* User Details Form */}
-        {showUserForm && (
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <User className="w-5 h-5" />
-                Tell us about yourself
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleUserFormSubmit} className="space-y-4">
-                <div>
-                  <Label htmlFor="name">Name *</Label>
-                  <Input
-                    id="name"
-                    type="text"
-                    value={userDetails.name}
-                    onChange={(e) => setUserDetails(prev => ({ ...prev, name: e.target.value }))}
-                    placeholder="Enter your full name"
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="email">Email (Optional)</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={userDetails.email}
-                    onChange={(e) => setUserDetails(prev => ({ ...prev, email: e.target.value }))}
-                    placeholder="Enter your email"
-                  />
-                </div>
-                <Button type="submit" className="w-full">
-                  View My Results
-                </Button>
-              </form>
+        {/* Success Alert */}
+        {showAlert && (
+          <Alert className="mb-6 border-green-200 bg-green-50 dark:bg-green-900/20">
+            <Download className="h-4 w-4 text-green-600" />
+            <AlertDescription className="text-green-800 dark:text-green-200">
+              Your quiz report has been successfully downloaded!
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {/* Header */}
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
+              Quiz Results
+            </h1>
+            <p className="text-gray-600 dark:text-gray-300 mt-1">
+              {savedResults.topicTitle}
+            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              Welcome, {userDetails.name}!
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={generatePDF}>
+              <Download className="w-4 h-4 mr-2" />
+              Download PDF
+            </Button>
+            <Button onClick={() => navigate('/')}>
+              <Home className="w-4 h-4 mr-2" />
+              Home
+            </Button>
+          </div>
+        </div>
+
+        {/* Performance Message */}
+        <Card className="mb-6 border-l-4 border-l-blue-500">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3 mb-3">
+              <Star className="w-6 h-6 text-yellow-500" />
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
+                Personal Message
+              </h3>
+            </div>
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+              {getPerformanceMessage(percentage, userDetails.name)}
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Summary Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <Card>
+            <CardContent className="flex items-center justify-center p-6">
+              <div className="text-center">
+                <Trophy className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
+                <p className="text-2xl font-bold text-gray-800 dark:text-white">
+                  {percentage}%
+                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Score</p>
+              </div>
             </CardContent>
           </Card>
-        )}
 
-        {!showUserForm && (
-          <>
-            {/* Success Alert */}
-            {showAlert && (
-              <Alert className="mb-6 border-green-200 bg-green-50 dark:bg-green-900/20">
-                <Download className="h-4 w-4 text-green-600" />
-                <AlertDescription className="text-green-800 dark:text-green-200">
-                  Your quiz report has been successfully downloaded!
-                </AlertDescription>
-              </Alert>
-            )}
-
-            {/* Header */}
-            <div className="flex justify-between items-center mb-6">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
-                  Quiz Results
-                </h1>
-                <p className="text-gray-600 dark:text-gray-300 mt-1">
-                  {savedResults.topicTitle}
+          <Card>
+            <CardContent className="flex items-center justify-center p-6">
+              <div className="text-center">
+                <Target className="w-8 h-8 text-green-500 mx-auto mb-2" />
+                <p className="text-2xl font-bold text-gray-800 dark:text-white">
+                  {correctAnswers}/{totalQuestions}
                 </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                  Welcome, {userDetails.name}!
-                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Correct</p>
               </div>
-              <div className="flex gap-2">
-                <Button variant="outline" onClick={generatePDF}>
-                  <Download className="w-4 h-4 mr-2" />
-                  Download PDF
-                </Button>
-                <Button onClick={() => navigate('/')}>
-                  <Home className="w-4 h-4 mr-2" />
-                  Home
-                </Button>
-              </div>
-            </div>
+            </CardContent>
+          </Card>
 
-            {/* Performance Message */}
-            <Card className="mb-6 border-l-4 border-l-blue-500">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-3 mb-3">
-                  <Star className="w-6 h-6 text-yellow-500" />
-                  <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
-                    Personal Message
-                  </h3>
+          <Card>
+            <CardContent className="flex items-center justify-center p-6">
+              <div className="text-center">
+                <Clock className="w-8 h-8 text-blue-500 mx-auto mb-2" />
+                <p className="text-2xl font-bold text-gray-800 dark:text-white">
+                  {formatTime(savedResults.timeElapsed)}
+                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Time</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="flex items-center justify-center p-6">
+              <div className="text-center">
+                <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <span className="text-white font-bold text-sm">{incorrectAnswers.length}</span>
                 </div>
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                  {getPerformanceMessage(percentage, userDetails.name)}
+                <p className="text-2xl font-bold text-gray-800 dark:text-white">
+                  {incorrectAnswers.length}
                 </p>
-              </CardContent>
-            </Card>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Incorrect</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-            {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-              <Card>
-                <CardContent className="flex items-center justify-center p-6">
-                  <div className="text-center">
-                    <Trophy className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
-                    <p className="text-2xl font-bold text-gray-800 dark:text-white">
-                      {percentage}%
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">Score</p>
-                  </div>
-                </CardContent>
-              </Card>
+        {/* Performance Badge */}
+        <div className="text-center mb-8">
+          <Badge 
+            variant={percentage >= 80 ? "default" : percentage >= 60 ? "secondary" : "destructive"}
+            className="text-lg px-4 py-2"
+          >
+            {percentage >= 80 ? "Excellent!" : percentage >= 60 ? "Good Job!" : "Keep Practicing!"}
+          </Badge>
+        </div>
 
-              <Card>
-                <CardContent className="flex items-center justify-center p-6">
-                  <div className="text-center">
-                    <Target className="w-8 h-8 text-green-500 mx-auto mb-2" />
-                    <p className="text-2xl font-bold text-gray-800 dark:text-white">
-                      {correctAnswers}/{totalQuestions}
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">Correct</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="flex items-center justify-center p-6">
-                  <div className="text-center">
-                    <Clock className="w-8 h-8 text-blue-500 mx-auto mb-2" />
-                    <p className="text-2xl font-bold text-gray-800 dark:text-white">
-                      {formatTime(savedResults.timeElapsed)}
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">Time</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="flex items-center justify-center p-6">
-                  <div className="text-center">
-                    <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-2">
-                      <span className="text-white font-bold text-sm">{incorrectAnswers.length}</span>
+        {/* Incorrect Answers Review */}
+        {incorrectAnswers.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+              Review Incorrect Answers
+            </h2>
+            <div className="space-y-6">
+              {incorrectAnswers.map((result, index) => (
+                <Card key={result.questionId} className="border-l-4 border-l-red-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg">
+                      Question {index + 1}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="mb-4">
+                      <CodeHighlighter text={result.question} />
                     </div>
-                    <p className="text-2xl font-bold text-gray-800 dark:text-white">
-                      {incorrectAnswers.length}
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">Incorrect</p>
-                  </div>
-                </CardContent>
-              </Card>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div className="bg-red-50 dark:bg-red-900/20 p-3 rounded-lg">
+                        <p className="text-sm font-medium text-red-700 dark:text-red-300 mb-1">
+                          Your Answer:
+                        </p>
+                        <p className="text-red-800 dark:text-red-200">
+                          {getOptionLabel(result.selectedAnswer)}. {/* Add option text here if needed */}
+                        </p>
+                      </div>
+                      
+                      <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg">
+                        <p className="text-sm font-medium text-green-700 dark:text-green-300 mb-1">
+                          Correct Answer:
+                        </p>
+                        <p className="text-green-800 dark:text-green-200">
+                          {getOptionLabel(result.correctAnswer)}. {/* Add option text here if needed */}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                      <p className="text-sm font-medium text-blue-700 dark:text-blue-300 mb-2">
+                        Explanation:
+                      </p>
+                      <p className="text-blue-800 dark:text-blue-200">
+                        {result.explanation}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
-
-            {/* Performance Badge */}
-            <div className="text-center mb-8">
-              <Badge 
-                variant={percentage >= 80 ? "default" : percentage >= 60 ? "secondary" : "destructive"}
-                className="text-lg px-4 py-2"
-              >
-                {percentage >= 80 ? "Excellent!" : percentage >= 60 ? "Good Job!" : "Keep Practicing!"}
-              </Badge>
-            </div>
-
-            {/* Incorrect Answers Review */}
-            {incorrectAnswers.length > 0 && (
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
-                  Review Incorrect Answers
-                </h2>
-                <div className="space-y-6">
-                  {incorrectAnswers.map((result, index) => (
-                    <Card key={result.questionId} className="border-l-4 border-l-red-500">
-                      <CardHeader>
-                        <CardTitle className="text-lg">
-                          Question {index + 1}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="mb-4">
-                          <CodeHighlighter text={result.question} />
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                          <div className="bg-red-50 dark:bg-red-900/20 p-3 rounded-lg">
-                            <p className="text-sm font-medium text-red-700 dark:text-red-300 mb-1">
-                              Your Answer:
-                            </p>
-                            <p className="text-red-800 dark:text-red-200">
-                              {getOptionLabel(result.selectedAnswer)}. {/* Add option text here if needed */}
-                            </p>
-                          </div>
-                          
-                          <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg">
-                            <p className="text-sm font-medium text-green-700 dark:text-green-300 mb-1">
-                              Correct Answer:
-                            </p>
-                            <p className="text-green-800 dark:text-green-200">
-                              {getOptionLabel(result.correctAnswer)}. {/* Add option text here if needed */}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                          <p className="text-sm font-medium text-blue-700 dark:text-blue-300 mb-2">
-                            Explanation:
-                          </p>
-                          <p className="text-blue-800 dark:text-blue-200">
-                            {result.explanation}
-                          </p>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Action Buttons */}
-            <div className="text-center space-x-4">
-              <Button onClick={() => navigate('/')} size="lg">
-                Take Another Quiz
-              </Button>
-              <Button variant="outline" onClick={() => window.location.reload()} size="lg">
-                Retake This Quiz
-              </Button>
-            </div>
-          </>
+          </div>
         )}
+
+        {/* Action Buttons */}
+        <div className="text-center space-x-4">
+          <Button onClick={() => navigate('/')} size="lg">
+            Take Another Quiz
+          </Button>
+          <Button variant="outline" onClick={() => window.location.reload()} size="lg">
+            Retake This Quiz
+          </Button>
+        </div>
       </div>
     </div>
   );
