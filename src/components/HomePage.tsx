@@ -18,7 +18,7 @@ interface Topic {
 }
 
 const HomePage = () => {
-  const [topics] = useState<Topic[]>(topicsData);
+  const [topics] = useState<Topic[]>(topicsData as Topic[]);
   const [filter, setFilter] = useState<'all' | 'quiz' | 'flashcard'>('all');
   const [categoryFilter, setCategoryFilter] = useState<'all' | 'general' | 'programming'>('all');
   const navigate = useNavigate();
