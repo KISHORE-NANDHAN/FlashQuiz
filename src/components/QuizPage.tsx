@@ -11,6 +11,7 @@ import CodeHighlighter from '@/components/CodeHighlighter';
 import aptitudeQuestions from '@/data/aptitude.json';
 import javaOopQuestions from '@/data/java_oop.json';
 import javascriptQuestions from '@/data/javascript.json';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Question {
   id: number;
@@ -36,6 +37,7 @@ const QuizPage = () => {
   const { topicId } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -156,10 +158,10 @@ const QuizPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-300">Loading quiz...</p>
+          <div className="animate-spin rounded-full h-8 w-8 sm:h-12 sm:w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">Loading quiz...</p>
         </div>
       </div>
     );
@@ -167,11 +169,11 @@ const QuizPage = () => {
 
   if (!topic || questions.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
-          <CardContent className="text-center py-8">
-            <p className="text-gray-600 dark:text-gray-300 mb-4">Quiz not found</p>
-            <Button onClick={() => navigate('/')}>
+          <CardContent className="text-center py-6 sm:py-8">
+            <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm sm:text-base">Quiz not found</p>
+            <Button onClick={() => navigate('/')} size={isMobile ? "sm" : "default"}>
               <Home className="w-4 h-4 mr-2" />
               Back to Home
             </Button>
@@ -186,64 +188,69 @@ const QuizPage = () => {
   const score = results.filter(r => r.isCorrect).length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-3 sm:p-4">
       <div className="container mx-auto max-w-4xl">
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-3">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white truncate">
               {topic.title}
             </h1>
-            <div className="flex items-center gap-4 mt-2">
-              <Badge variant="outline">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-2">
+              <Badge variant="outline" className="text-xs">
                 Question {currentQuestionIndex + 1} of {questions.length}
               </Badge>
-              <Badge variant="outline">
+              <Badge variant="outline" className="text-xs">
                 <Clock className="w-3 h-3 mr-1" />
                 {formatTime(timeElapsed)}
               </Badge>
-              <Badge variant="outline">
+              <Badge variant="outline" className="text-xs">
                 Score: {score}/{results.length}
               </Badge>
             </div>
           </div>
-          <Button variant="outline" onClick={() => navigate('/')}>
+          <Button 
+            variant="outline" 
+            onClick={() => navigate('/')}
+            size={isMobile ? "sm" : "default"}
+            className="self-start sm:self-auto"
+          >
             <Home className="w-4 h-4 mr-2" />
-            Home
+            <span className="hidden sm:inline">Home</span>
           </Button>
         </div>
 
         {/* Progress */}
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <Progress value={progress} className="h-2" />
         </div>
 
         {/* Question Card */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="text-lg">
+        <Card className="mb-4 sm:mb-6">
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="text-base sm:text-lg">
               Question {currentQuestionIndex + 1}
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="mb-6">
+          <CardContent className="p-4 sm:p-6 pt-0">
+            <div className="mb-4 sm:mb-6">
               <CodeHighlighter text={currentQuestion.question} />
             </div>
 
             {/* Options */}
-            <div className="space-y-3">
+            <div className="space-y-2 sm:space-y-3">
               {(['option1', 'option2', 'option3', 'option4'] as const).map((optionKey) => (
                 <button
                   key={optionKey}
                   onClick={() => handleAnswerSelect(optionKey)}
-                  className={`w-full p-4 text-left rounded-lg border-2 transition-all duration-200 ${
+                  className={`w-full p-3 sm:p-4 text-left rounded-lg border-2 transition-all duration-200 ${
                     selectedAnswer === optionKey
                       ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                       : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                   }`}
                 >
-                  <div className="flex items-center">
-                    <div className={`w-4 h-4 rounded-full border-2 mr-3 flex items-center justify-center ${
+                  <div className="flex items-start sm:items-center">
+                    <div className={`w-4 h-4 rounded-full border-2 mr-2 sm:mr-3 flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-0 ${
                       selectedAnswer === optionKey
                         ? 'border-blue-500 bg-blue-500'
                         : 'border-gray-300'
@@ -252,12 +259,14 @@ const QuizPage = () => {
                         <div className="w-2 h-2 rounded-full bg-white"></div>
                       )}
                     </div>
-                    <span className="font-medium text-gray-700 dark:text-gray-200">
-                      {optionKey.charAt(optionKey.length - 1).toUpperCase()}.
-                    </span>
-                    <span className="ml-2 text-gray-800 dark:text-gray-100">
-                      {currentQuestion[optionKey]}
-                    </span>
+                    <div className="min-w-0 flex-1">
+                      <span className="font-medium text-gray-700 dark:text-gray-200 text-sm sm:text-base">
+                        {optionKey.charAt(optionKey.length - 1).toUpperCase()}.
+                      </span>
+                      <span className="ml-2 text-gray-800 dark:text-gray-100 text-sm sm:text-base break-words">
+                        {currentQuestion[optionKey]}
+                      </span>
+                    </div>
                   </div>
                 </button>
               ))}
@@ -266,16 +275,23 @@ const QuizPage = () => {
         </Card>
 
         {/* Navigation */}
-        <div className="flex justify-between">
+        <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-0">
           <Button
             variant="outline"
             onClick={handlePreviousQuestion}
             disabled={currentQuestionIndex === 0}
+            size={isMobile ? "sm" : "default"}
+            className="order-2 sm:order-1"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Previous
           </Button>
-          <Button onClick={handleNextQuestion} disabled={!selectedAnswer}>
+          <Button 
+            onClick={handleNextQuestion} 
+            disabled={!selectedAnswer}
+            size={isMobile ? "default" : "default"}
+            className="order-1 sm:order-2"
+          >
             {currentQuestionIndex === questions.length - 1 ? 'Finish Quiz' : 'Next'}
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
