@@ -1,0 +1,33 @@
+
+[
+  {
+    "id": 1,
+    "question": "What will be the output of this JavaScript code?\n\n```javascript\nconsole.log(typeof null);\n```",
+    "option1": "null",
+    "option2": "undefined",
+    "option3": "object",
+    "option4": "string",
+    "answer": "option3",
+    "explanation": "In JavaScript, typeof null returns 'object'. This is a known quirk in the language."
+  },
+  {
+    "id": 2,
+    "question": "Which method is used to add elements to the end of an array?",
+    "option1": "push()",
+    "option2": "add()",
+    "option3": "append()",
+    "option4": "insert()",
+    "answer": "option1",
+    "explanation": "The push() method adds one or more elements to the end of an array and returns the new length."
+  },
+  {
+    "id": 3,
+    "question": "What does this code output?\n\n```javascript\nlet x = 1;\nlet y = '1';\nconsole.log(x == y);\nconsole.log(x === y);\n```",
+    "option1": "true, true",
+    "option2": "false, false",
+    "option3": "true, false",
+    "option4": "false, true",
+    "answer": "option3",
+    "explanation": "== performs type coercion, so 1 == '1' is true. === checks both value and type, so 1 === '1' is false."
+  }
+]

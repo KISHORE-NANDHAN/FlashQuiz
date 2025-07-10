@@ -1,0 +1,43 @@
+
+[
+  {
+    "id": "aptitude-basics",
+    "type": "quiz",
+    "title": "Aptitude Basics",
+    "category": "general",
+    "file": "aptitude.json",
+    "description": "Basic aptitude questions covering math, logic, and reasoning"
+  },
+  {
+    "id": "java-oop",
+    "type": "quiz",
+    "title": "Java OOP",
+    "category": "programming",
+    "file": "java_oop.json",
+    "description": "Object-oriented programming concepts in Java"
+  },
+  {
+    "id": "ds-flashcards",
+    "type": "flashcard",
+    "title": "Data Structures in Java",
+    "category": "programming",
+    "file": "ds_flashcards.json",
+    "description": "Core data structures with Java code examples"
+  },
+  {
+    "id": "javascript-basics",
+    "type": "quiz",
+    "title": "JavaScript Fundamentals",
+    "category": "programming",
+    "file": "javascript.json",
+    "description": "Essential JavaScript concepts and syntax"
+  },
+  {
+    "id": "algorithms-flashcards",
+    "type": "flashcard",
+    "title": "Algorithm Patterns",
+    "category": "programming",
+    "file": "algorithms_flashcards.json",
+    "description": "Common algorithmic patterns and solutions"
+  }
+]

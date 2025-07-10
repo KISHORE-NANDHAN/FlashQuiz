@@ -1,13 +1,26 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from '@/contexts/ThemeContext';
+import { Toaster } from '@/components/ui/toaster';
+import HomePage from '@/components/HomePage';
+import QuizPage from '@/components/QuizPage';
+import FlashcardPage from '@/components/FlashcardPage';
+import ResultsPage from '@/components/ResultsPage';
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <ThemeProvider>
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/quiz/:topicId" element={<QuizPage />} />
+          <Route path="/flashcards/:topicId" element={<FlashcardPage />} />
+          <Route path="/results" element={<ResultsPage />} />
+        </Routes>
+        <Toaster />
       </div>
-    </div>
+    </ThemeProvider>
   );
 };
 

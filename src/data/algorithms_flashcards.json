@@ -1,0 +1,23 @@
+
+[
+  {
+    "id": 1,
+    "description": "Binary Search Algorithm",
+    "output": "Time Complexity: O(log n)\nSpace Complexity: O(1)\nUse Case: Searching in sorted arrays"
+  },
+  {
+    "id": 2,
+    "description": "Quick Sort Implementation",
+    "output": "```java\npublic void quickSort(int[] arr, int low, int high) {\n    if (low < high) {\n        int pi = partition(arr, low, high);\n        quickSort(arr, low, pi - 1);\n        quickSort(arr, pi + 1, high);\n    }\n}\n```"
+  },
+  {
+    "id": 3,
+    "description": "Depth-First Search (DFS)",
+    "output": "```java\nvoid DFS(int v, boolean[] visited) {\n    visited[v] = true;\n    System.out.print(v + \" \");\n    \n    for (int adj : graph.get(v)) {\n        if (!visited[adj])\n            DFS(adj, visited);\n    }\n}\n```"
+  },
+  {
+    "id": 4,
+    "description": "Two Pointer Technique",
+    "output": "Used for: Array pair problems, palindrome checking\nExample: Finding pair with target sum in sorted array\nTime: O(n), Space: O(1)"
+  }
+]

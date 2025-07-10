@@ -1,0 +1,33 @@
+
+[
+  {
+    "id": 1,
+    "question": "If 5 books cost $25, how much do 8 books cost?",
+    "option1": "$35",
+    "option2": "$40",
+    "option3": "$45",
+    "option4": "$50",
+    "answer": "option2",
+    "explanation": "Each book costs $25/5 = $5. So 8 books cost 8 × $5 = $40."
+  },
+  {
+    "id": 2,
+    "question": "What comes next in the sequence: 2, 6, 12, 20, 30, ?",
+    "option1": "40",
+    "option2": "42",
+    "option3": "44",
+    "option4": "46",
+    "answer": "option2",
+    "explanation": "The differences are 4, 6, 8, 10... increasing by 2 each time. Next difference is 12, so 30 + 12 = 42."
+  },
+  {
+    "id": 3,
+    "question": "A train travels 240 km in 3 hours. What is its speed in km/h?",
+    "option1": "70 km/h",
+    "option2": "75 km/h",
+    "option3": "80 km/h",
+    "option4": "85 km/h",
+    "answer": "option3",
+    "explanation": "Speed = Distance/Time = 240 km / 3 hours = 80 km/h."
+  }
+]

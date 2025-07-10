@@ -1,0 +1,33 @@
+
+[
+  {
+    "id": 1,
+    "question": "What is the output of the following Java code?\n\n```java\npublic class Test {\n    public static void main(String[] args) {\n        System.out.println(2 + \"2\");\n    }\n}\n```",
+    "option1": "4",
+    "option2": "22",
+    "option3": "Error",
+    "option4": "undefined",
+    "answer": "option2",
+    "explanation": "String concatenation in Java results in '22' because the + operator concatenates when one operand is a String."
+  },
+  {
+    "id": 2,
+    "question": "Which keyword is used to inherit a class in Java?",
+    "option1": "implements",
+    "option2": "extends",
+    "option3": "inherits",
+    "option4": "super",
+    "answer": "option2",
+    "explanation": "The 'extends' keyword is used for class inheritance in Java."
+  },
+  {
+    "id": 3,
+    "question": "What will be printed?\n\n```java\nclass Parent {\n    void show() { System.out.println(\"Parent\"); }\n}\nclass Child extends Parent {\n    void show() { System.out.println(\"Child\"); }\n}\nParent p = new Child();\np.show();\n```",
+    "option1": "Parent",
+    "option2": "Child",
+    "option3": "Compilation Error",
+    "option4": "Runtime Error",
+    "answer": "option2",
+    "explanation": "This demonstrates polymorphism. The overridden method in Child class is called at runtime."
+  }
+]

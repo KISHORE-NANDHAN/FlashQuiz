@@ -1,0 +1,23 @@
+
+[
+  {
+    "id": 1,
+    "description": "Array Declaration and Initialization",
+    "output": "int[] arr = {1, 2, 3, 4, 5};\nSystem.out.println(arr[2]); // Output: 3"
+  },
+  {
+    "id": 2,
+    "description": "ArrayList Basic Operations",
+    "output": "ArrayList<String> list = new ArrayList<>();\nlist.add(\"Hello\");\nlist.add(\"World\");\nSystem.out.println(list.size()); // Output: 2"
+  },
+  {
+    "id": 3,
+    "description": "Stack Implementation",
+    "output": "Stack<Integer> stack = new Stack<>();\nstack.push(10);\nstack.push(20);\nSystem.out.println(stack.pop()); // Output: 20"
+  },
+  {
+    "id": 4,
+    "description": "HashMap Usage",
+    "output": "HashMap<String, Integer> map = new HashMap<>();\nmap.put(\"key1\", 100);\nSystem.out.println(map.get(\"key1\")); // Output: 100"
+  }
+]
