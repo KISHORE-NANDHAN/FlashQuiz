@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
@@ -8,6 +7,8 @@ import { ArrowLeft, ArrowRight, Home, RotateCcw, Shuffle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import topicsData from '@/data/topics.json';
 import CodeHighlighter from '@/components/CodeHighlighter';
+import dsFlashcards from '@/data/ds_flashcards.json';
+import algorithmsFlashcards from '@/data/algorithms_flashcards.json';
 
 interface Flashcard {
   id: number;
@@ -28,10 +29,23 @@ const FlashcardPage = () => {
   const topic = topicsData.find(t => t.id === topicId);
 
   useEffect(() => {
-    const loadFlashcards = async () => {
+    const loadFlashcards = () => {
       try {
-        const response = await import(`@/data/${topic?.file}`);
-        setFlashcards(response.default);
+        let flashcardsData: Flashcard[] = [];
+        
+        // Map topic files to their imported data
+        switch (topic?.file) {
+          case 'ds_flashcards.json':
+            flashcardsData = dsFlashcards;
+            break;
+          case 'algorithms_flashcards.json':
+            flashcardsData = algorithmsFlashcards;
+            break;
+          default:
+            throw new Error('Flashcards not found');
+        }
+        
+        setFlashcards(flashcardsData);
         setLoading(false);
       } catch (error) {
         console.error('Error loading flashcards:', error);

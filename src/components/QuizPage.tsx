@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,6 +8,9 @@ import { ArrowRight, ArrowLeft, Home, Clock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import topicsData from '@/data/topics.json';
 import CodeHighlighter from '@/components/CodeHighlighter';
+import aptitudeQuestions from '@/data/aptitude.json';
+import javaOopQuestions from '@/data/java_oop.json';
+import javascriptQuestions from '@/data/javascript.json';
 
 interface Question {
   id: number;
@@ -46,10 +48,26 @@ const QuizPage = () => {
   const topic = topicsData.find(t => t.id === topicId);
 
   useEffect(() => {
-    const loadQuestions = async () => {
+    const loadQuestions = () => {
       try {
-        const response = await import(`@/data/${topic?.file}`);
-        const shuffledQuestions = [...response.default].sort(() => Math.random() - 0.5);
+        let questionsData: Question[] = [];
+        
+        // Map topic files to their imported data
+        switch (topic?.file) {
+          case 'aptitude.json':
+            questionsData = aptitudeQuestions;
+            break;
+          case 'java_oop.json':
+            questionsData = javaOopQuestions;
+            break;
+          case 'javascript.json':
+            questionsData = javascriptQuestions;
+            break;
+          default:
+            throw new Error('Questions not found');
+        }
+        
+        const shuffledQuestions = [...questionsData].sort(() => Math.random() - 0.5);
         setQuestions(shuffledQuestions);
         setLoading(false);
       } catch (error) {
