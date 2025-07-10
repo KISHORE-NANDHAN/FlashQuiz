@@ -7,8 +7,6 @@ import { ArrowLeft, ArrowRight, Home, RotateCcw, Shuffle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import topicsData from '@/data/topics.json';
 import CodeHighlighter from '@/components/CodeHighlighter';
-import dsFlashcards from '@/data/ds_flashcards.json';
-import algorithmsFlashcards from '@/data/algorithms_flashcards.json';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Flashcard {
@@ -29,41 +27,40 @@ const FlashcardPage = () => {
   const [loading, setLoading] = useState(true);
 
   const topic = topicsData.find(t => t.id === topicId);
+  const flashcardModules = import.meta.glob('@/data/*.json', { eager: true });
 
-  useEffect(() => {
-    const loadFlashcards = () => {
-      try {
-        let flashcardsData: Flashcard[] = [];
-        
-        // Map topic files to their imported data
-        switch (topic?.file) {
-          case 'ds_flashcards.json':
-            flashcardsData = dsFlashcards;
-            break;
-          case 'algorithms_flashcards.json':
-            flashcardsData = algorithmsFlashcards;
-            break;
-          default:
-            throw new Error('Flashcards not found');
-        }
-        
-        setFlashcards(flashcardsData);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error loading flashcards:', error);
-        toast({
-          title: "Error",
-          description: "Failed to load flashcards",
-          variant: "destructive"
-        });
-        navigate('/');
-      }
-    };
+ useEffect(() => {
+  const loadFlashcards = () => {
+    try {
+      if (!topic?.file) throw new Error('Invalid topic');
 
-    if (topic) {
-      loadFlashcards();
+      // Match the correct file by its name
+      const matchKey = Object.keys(flashcardModules).find(key =>
+        key.endsWith(`/${topic.file}`)
+      );
+
+      if (!matchKey) throw new Error('Flashcards not found');
+
+      const module = flashcardModules[matchKey] as { default: Flashcard[] };
+      setFlashcards(module.default);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error loading flashcards:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load flashcards",
+        variant: "destructive"
+      });
+      navigate('/');
     }
-  }, [topicId, topic, navigate, toast]);
+  };
+
+  if (topic) {
+    loadFlashcards();
+  }
+}, [topicId, topic, navigate, toast]);
+
+
 
   const handleNext = () => {
     if (currentIndex < flashcards.length - 1) {

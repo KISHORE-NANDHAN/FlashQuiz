@@ -33,6 +33,14 @@
     "description": "Core data structures with Java code examples"
   },
   {
+    "id": "java-oop2-fl",
+    "type": "flashcard",
+    "title": "java oop2 flashcards",
+    "category": "programming",
+    "file": "oop2_flashcards.json",
+    "description": "Core data structures with Java code examples"
+  },
+  {
     "id": "javascript-basics",
     "type": "quiz",
     "title": "JavaScript Fundamentals",

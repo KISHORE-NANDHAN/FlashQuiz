@@ -8,9 +8,6 @@ import { ArrowRight, ArrowLeft, Home, Clock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import topicsData from '@/data/topics.json';
 import CodeHighlighter from '@/components/CodeHighlighter';
-import aptitudeQuestions from '@/data/aptitude.json';
-import javaOopQuestions from '@/data/java_oop.json';
-import javascriptQuestions from '@/data/javascript.json';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Question {
@@ -46,47 +43,49 @@ const QuizPage = () => {
   const [isQuizComplete, setIsQuizComplete] = useState(false);
   const [loading, setLoading] = useState(true);
   const [timeElapsed, setTimeElapsed] = useState(0);
+  const [currentExplanation, setCurrentExplanation] = useState<string>('');
+  const [isOptionLocked, setIsOptionLocked] = useState(false);
+
+  
+  
 
   const topic = topicsData.find(t => t.id === topicId);
+  const quizModules = import.meta.glob('@/data/*.json', { eager: true });
+
 
   useEffect(() => {
-    const loadQuestions = () => {
-      try {
-        let questionsData: Question[] = [];
-        
-        // Map topic files to their imported data
-        switch (topic?.file) {
-          case 'aptitude.json':
-            questionsData = aptitudeQuestions;
-            break;
-          case 'java_oop.json':
-            questionsData = javaOopQuestions;
-            break;
-          case 'javascript.json':
-            questionsData = javascriptQuestions;
-            break;
-          default:
-            throw new Error('Questions not found');
-        }
-        
-        const shuffledQuestions = [...questionsData].sort(() => Math.random() - 0.5);
-        setQuestions(shuffledQuestions);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error loading questions:', error);
-        toast({
-          title: "Error",
-          description: "Failed to load quiz questions",
-          variant: "destructive"
-        });
-        navigate('/');
-      }
-    };
+  const loadQuestions = () => {
+    try {
+      if (!topic?.file) throw new Error('Invalid topic');
 
-    if (topic) {
-      loadQuestions();
+      const matchKey = Object.keys(quizModules).find(key =>
+        key.endsWith(`/${topic.file}`)
+      );
+
+      if (!matchKey) throw new Error('Quiz data not found');
+
+      const module = quizModules[matchKey] as { default: Question[] };
+      const questionsData = module.default;
+
+      const shuffledQuestions = [...questionsData].sort(() => Math.random() - 0.5);
+      setQuestions(shuffledQuestions);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error loading quiz:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load quiz questions",
+        variant: "destructive"
+      });
+      navigate('/');
     }
-  }, [topicId, topic, navigate, toast]);
+  };
+
+  if (topic) {
+    loadQuestions();
+  }
+}, [topicId, topic, navigate, toast]);
+
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -104,9 +103,23 @@ const QuizPage = () => {
 
   const handleAnswerSelect = (answer: string) => {
     setSelectedAnswer(answer);
+
+    const currentQuestion = questions[currentQuestionIndex];
+    const isCorrect = answer === currentQuestion.answer;
+
+    if (!isCorrect) {
+      setCurrentExplanation(currentQuestion.explanation);
+      setIsOptionLocked(true);  // 🚫 Lock the options
+    } else {
+      setCurrentExplanation('');
+      setIsOptionLocked(false); // ✅ Allow change if correct
+    }
   };
 
+
+
   const handleNextQuestion = () => {
+    
     if (!selectedAnswer) {
       toast({
         title: "Please select an answer",
@@ -133,7 +146,10 @@ const QuizPage = () => {
 
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
+      setCurrentExplanation('');
       setSelectedAnswer('');
+      setIsOptionLocked(false);  // 🔓 Reset lock
+
     } else {
       setIsQuizComplete(true);
       // Save results to localStorage and navigate
@@ -153,6 +169,8 @@ const QuizPage = () => {
       // Remove the last result
       setResults(prev => prev.slice(0, -1));
       setSelectedAnswer('');
+      setIsOptionLocked(false);  // 🔓 Reset lock
+
     }
   };
 
@@ -177,6 +195,7 @@ const QuizPage = () => {
               <Home className="w-4 h-4 mr-2" />
               Back to Home
             </Button>
+            
           </CardContent>
         </Card>
       </div>
@@ -234,7 +253,29 @@ const QuizPage = () => {
           </CardHeader>
           <CardContent className="p-4 sm:p-6 pt-0">
             <div className="mb-4 sm:mb-6">
-              <CodeHighlighter text={currentQuestion.question} />
+              {currentQuestion.question.includes('```') ? (
+                <>
+                  <p className="mb-2 text-sm sm:text-base text-gray-800 dark:text-gray-200">
+                    {
+                      currentQuestion.question
+                        .split('```')[0]
+                        .trim()
+                    }
+                  </p>
+                  <CodeHighlighter
+                    text={
+                      currentQuestion.question
+                        .replace(/^[\s\S]*?```[a-z]*\n?/i, '')  // remove text and opening ```
+                        .replace(/```$/, '')                   // remove closing ```
+                        .trim()
+                    }
+                  />
+                </>
+              ) : (
+                <p className="text-sm sm:text-base text-gray-800 dark:text-gray-200 whitespace-pre-line">
+                  {currentQuestion.question}
+                </p>
+              )}
             </div>
 
             {/* Options */}
@@ -243,6 +284,7 @@ const QuizPage = () => {
                 <button
                   key={optionKey}
                   onClick={() => handleAnswerSelect(optionKey)}
+                  disabled={isOptionLocked}  // 🧠 New line to disable on wrong answer
                   className={`w-full p-3 sm:p-4 text-left rounded-lg border-2 transition-all duration-200 ${
                     selectedAnswer === optionKey
                       ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
@@ -271,6 +313,15 @@ const QuizPage = () => {
                 </button>
               ))}
             </div>
+            {currentExplanation && (
+            <div className="mt-4 p-4 rounded-lg bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-300 dark:border-yellow-700">
+              <h4 className="font-semibold text-yellow-800 dark:text-yellow-200 mb-2">Explanation:</h4>
+              <p className="text-sm text-yellow-700 dark:text-yellow-300 whitespace-pre-line">
+                {currentExplanation}
+              </p>
+            </div>
+          )}
+
           </CardContent>
         </Card>
 
