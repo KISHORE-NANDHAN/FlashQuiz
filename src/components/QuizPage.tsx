@@ -205,6 +205,7 @@ const QuizPage = () => {
   const currentQuestion = questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
   const score = results.filter(r => r.isCorrect).length;
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-3 sm:p-4">
@@ -285,11 +286,18 @@ const QuizPage = () => {
                   key={optionKey}
                   onClick={() => handleAnswerSelect(optionKey)}
                   disabled={isOptionLocked}  // 🧠 New line to disable on wrong answer
-                  className={`w-full p-3 sm:p-4 text-left rounded-lg border-2 transition-all duration-200 ${
-                    selectedAnswer === optionKey
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                      : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
-                  }`}
+                  className={`w-full p-3 sm:p-4 text-left rounded-lg border-2 transition-all duration-200
+                    ${
+                      selectedAnswer === optionKey && isOptionLocked
+                        ? selectedAnswer === currentQuestion.answer
+                          ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
+                          : 'border-red-500 bg-red-50 dark:bg-red-900/20'
+                        : currentQuestion.answer === optionKey && isOptionLocked
+                          ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
+                          : selectedAnswer === optionKey
+                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                            : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                    }`}
                 >
                   <div className="flex items-start sm:items-center">
                     <div className={`w-4 h-4 rounded-full border-2 mr-2 sm:mr-3 flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-0 ${
