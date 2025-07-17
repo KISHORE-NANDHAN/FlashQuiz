@@ -23,8 +23,8 @@ const CodeHighlighter: React.FC<CodeHighlighterProps> = ({ text }) => {
                 <span className="text-xs text-gray-500 dark:text-gray-400">Scroll to view more</span>
               </div>
               <div className="bg-gray-900 dark:bg-gray-950 max-h-80 overflow-auto">
-                <pre className="p-4 text-sm font-mono text-gray-100 whitespace-pre">
-                  <code>
+                <pre className="p-4 text-sm font-mono text-gray-100 whitespace-pre text-left">
+                  <code className="block">
                     {highlightSyntax(code, language)}
                   </code>
                 </pre>
@@ -64,14 +64,18 @@ const CodeHighlighter: React.FC<CodeHighlighterProps> = ({ text }) => {
   const highlightSyntax = (code: string, language: string) => {
     if (language === 'java' || language === 'javascript' || language === 'js' || language === 'typescript' || language === 'ts') {
       return code.split('\n').map((line, lineIndex) => (
-        <div key={lineIndex} className="min-h-[1.25rem]">
+        <div key={lineIndex} className="min-h-[1.25rem] text-left" style={{ textAlign: 'left' }}>
           {highlightLine(line, language)}
         </div>
       ));
     }
 
     // Fallback for unsupported language
-    return <div className="whitespace-pre-wrap text-gray-100">{code}</div>;
+    return (
+      <div className="whitespace-pre text-gray-100 text-left" style={{ textAlign: 'left' }}>
+        {code}
+      </div>
+    );
   };
 
   const highlightLine = (line: string, language: string) => {
@@ -93,12 +97,23 @@ const CodeHighlighter: React.FC<CodeHighlighterProps> = ({ text }) => {
 
     const keywords = language === 'java' ? javaKeywords : jsKeywords;
     
-    // Split line into tokens while preserving whitespace
-    const tokens = line.split(/(\s+|[^\w\s])/);
+    // Preserve leading whitespace
+    const leadingWhitespace = line.match(/^(\s*)/)?.[1] || '';
+    const trimmedLine = line.trim();
+    
+    if (!trimmedLine) {
+      return <span>{line}</span>;
+    }
+    
+    // Split trimmed line into tokens while preserving whitespace and special characters
+    const tokens = trimmedLine.split(/(\s+|[(){}\[\];,\.=+\-*/<>!&|"'])/);
     
     return (
       <span>
+        {leadingWhitespace && <span>{leadingWhitespace}</span>}
         {tokens.map((token, index) => {
+          if (!token) return null;
+          
           // Check if token is a keyword
           if (keywords.includes(token)) {
             return (
