@@ -136,23 +136,23 @@ const FlashcardPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-teal-100 dark:from-gray-900 dark:to-gray-800">
-      <div className={`container mx-auto ${isMobile ? 'p-2' : 'p-3 sm:p-4 max-w-4xl'}`}>
+      <div className={`container mx-auto ${isMobile ? 'p-4' : 'p-3 sm:p-4 max-w-4xl'}`}>
         {/* Header */}
-        <div className={`flex flex-col ${isMobile ? 'mb-3' : 'sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6'} gap-3`}>
+        <div className={`flex flex-col ${isMobile ? 'mb-4' : 'sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6'} gap-3`}>
           <div className="min-w-0 flex-1">
-            <h1 className={`font-bold text-gray-800 dark:text-white truncate ${isMobile ? 'text-lg' : 'text-xl sm:text-2xl'}`}>
+            <h1 className={`font-bold text-gray-800 dark:text-white truncate ${isMobile ? 'text-xl' : 'text-xl sm:text-2xl'}`}>
               {topic.title}
             </h1>
-            <div className={`flex flex-wrap items-center mt-2 ${isMobile ? 'gap-1' : 'gap-2 sm:gap-4'}`}>
-              <Badge variant="outline" className="text-xs">
+            <div className={`flex flex-wrap items-center mt-2 ${isMobile ? 'gap-2' : 'gap-2 sm:gap-4'}`}>
+              <Badge variant="outline" className={isMobile ? 'text-sm' : 'text-xs'}>
                 Card {currentIndex + 1} of {flashcards.length}
               </Badge>
-              <Badge variant={isFlipped ? "default" : "secondary"} className="text-xs">
+              <Badge variant={isFlipped ? "default" : "secondary"} className={isMobile ? 'text-sm' : 'text-xs'}>
                 {isFlipped ? "Answer" : "Question"}
               </Badge>
             </div>
           </div>
-          <div className={`flex gap-1 sm:gap-2 flex-wrap ${isMobile ? 'justify-center' : ''}`}>
+          <div className={`flex gap-2 flex-wrap ${isMobile ? 'justify-center' : ''}`}>
             <Button variant="outline" onClick={handleShuffle} size={isMobile ? "sm" : "default"}>
               <Shuffle className="w-4 h-4" />
               <span className="hidden sm:inline ml-2">Shuffle</span>
@@ -171,10 +171,12 @@ const FlashcardPage = () => {
         </div>
 
         {/* Flashcard */}
-        <div className={`flex justify-center ${isMobile ? 'mb-3' : 'mb-4 sm:mb-6'}`}>
+        <div className={`flex justify-center ${isMobile ? 'mb-6' : 'mb-4 sm:mb-6'}`}>
           <div 
-            className={`relative w-full cursor-pointer perspective-1000 ${
-              isMobile ? 'h-[calc(100vh-160px)] max-h-[600px]' : 'max-w-2xl h-80 sm:h-96'
+            className={`relative cursor-pointer perspective-1000 ${
+              isMobile 
+                ? 'w-[90%] h-[calc(100vh-220px)] min-h-[500px]' 
+                : 'w-full max-w-2xl h-80 sm:h-96'
             }`}
             onClick={() => setIsFlipped(prev => !prev)}
           >
@@ -183,14 +185,14 @@ const FlashcardPage = () => {
             }`}>
               {/* Front of card */}
               <Card className="absolute inset-0 w-full h-full backface-hidden border-l-4 border-l-green-500 hover:shadow-xl transition-shadow duration-300">
-                <CardContent className={`h-full flex flex-col justify-center ${isMobile ? 'p-4' : 'p-4 sm:p-8'}`}>
+                <CardContent className={`h-full flex flex-col justify-center ${isMobile ? 'p-6' : 'p-4 sm:p-8'}`}>
                   <div className="text-center">
-                    <div className={`font-semibold text-gray-700 dark:text-gray-200 mb-4 leading-relaxed ${
-                      isMobile ? 'text-base' : 'text-sm sm:text-lg'
+                    <div className={`font-semibold text-gray-700 dark:text-gray-200 mb-6 leading-relaxed ${
+                      isMobile ? 'text-lg' : 'text-sm sm:text-lg'
                     }`}>
                       <CodeHighlighter text={currentCard.description} />
                     </div>
-                    <p className={`text-gray-500 dark:text-gray-400 ${isMobile ? 'mt-6 text-sm' : 'text-xs sm:text-sm mt-6 sm:mt-8'}`}>
+                    <p className={`text-gray-500 dark:text-gray-400 ${isMobile ? 'mt-8 text-base' : 'text-xs sm:text-sm mt-6 sm:mt-8'}`}>
                       Tap to reveal answer {!isMobile && 'or press Spacebar'}
                     </p>
                   </div>
@@ -199,21 +201,21 @@ const FlashcardPage = () => {
 
               {/* Back of card */}
               <Card className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 border-l-4 border-l-blue-500 hover:shadow-xl transition-shadow duration-300">
-                <CardContent className={`h-full flex flex-col justify-center ${isMobile ? 'p-4' : 'p-4 sm:p-8'}`}>
+                <CardContent className={`h-full flex flex-col justify-center ${isMobile ? 'p-6' : 'p-4 sm:p-8'}`}>
                   <div className="text-center">
-                    <h3 className={`font-semibold text-gray-700 dark:text-gray-200 mb-4 ${
-                      isMobile ? 'text-base' : 'text-sm sm:text-lg'
+                    <h3 className={`font-semibold text-gray-700 dark:text-gray-200 mb-6 ${
+                      isMobile ? 'text-lg' : 'text-sm sm:text-lg'
                     }`}>
                       Output:
                     </h3>
                     <div className={`bg-gray-50 dark:bg-gray-800 rounded-lg overflow-y-auto ${
-                      isMobile ? 'p-3 max-h-[400px]' : 'p-3 sm:p-4 max-h-60 sm:max-h-none'
+                      isMobile ? 'p-4 max-h-[350px]' : 'p-3 sm:p-4 max-h-60 sm:max-h-none'
                     }`}>
-                      <div className={isMobile ? 'text-sm' : ''}>
+                      <div className={isMobile ? 'text-base' : ''}>
                         <CodeHighlighter text={`\`\`\`java\n${currentCard.output}\n\`\`\``} />
                       </div>
                     </div>
-                    <p className={`text-gray-500 dark:text-gray-400 ${isMobile ? 'mt-3 text-sm' : 'text-xs sm:text-sm mt-3 sm:mt-4'}`}>
+                    <p className={`text-gray-500 dark:text-gray-400 ${isMobile ? 'mt-6 text-base' : 'text-xs sm:text-sm mt-3 sm:mt-4'}`}>
                       Tap to go back to question
                     </p>
                   </div>
@@ -224,14 +226,14 @@ const FlashcardPage = () => {
         </div>
 
         {/* Navigation */}
-        <div className={`${isMobile ? 'fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 p-3' : 'flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0'}`}>
+        <div className={`${isMobile ? 'fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 p-4' : 'flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0'}`}>
           {isMobile ? (
             <div className="flex justify-between items-center gap-3">
               <Button
                 variant="outline"
                 onClick={handlePrevious}
                 disabled={currentIndex === 0}
-                size="sm"
+                size="default"
                 className="flex-1"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
@@ -241,7 +243,7 @@ const FlashcardPage = () => {
               <Button 
                 variant="outline" 
                 onClick={() => navigate('/')}
-                size="sm"
+                size="default"
               >
                 <Home className="w-4 h-4" />
               </Button>
@@ -250,7 +252,7 @@ const FlashcardPage = () => {
                 variant="outline"
                 onClick={handleNext}
                 disabled={currentIndex === flashcards.length - 1}
-                size="sm"
+                size="default"
                 className="flex-1"
               >
                 Next
