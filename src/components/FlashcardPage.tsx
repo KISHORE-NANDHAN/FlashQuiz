@@ -29,38 +29,35 @@ const FlashcardPage = () => {
   const topic = topicsData.find(t => t.id === topicId);
   const flashcardModules = import.meta.glob('@/data/*.json', { eager: true });
 
- useEffect(() => {
-  const loadFlashcards = () => {
-    try {
-      if (!topic?.file) throw new Error('Invalid topic');
+  useEffect(() => {
+    const loadFlashcards = () => {
+      try {
+        if (!topic?.file) throw new Error('Invalid topic');
 
-      // Match the correct file by its name
-      const matchKey = Object.keys(flashcardModules).find(key =>
-        key.endsWith(`/${topic.file}`)
-      );
+        const matchKey = Object.keys(flashcardModules).find(key =>
+          key.endsWith(`/${topic.file}`)
+        );
 
-      if (!matchKey) throw new Error('Flashcards not found');
+        if (!matchKey) throw new Error('Flashcards not found');
 
-      const module = flashcardModules[matchKey] as { default: Flashcard[] };
-      setFlashcards(module.default);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error loading flashcards:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load flashcards",
-        variant: "destructive"
-      });
-      navigate('/');
+        const module = flashcardModules[matchKey] as { default: Flashcard[] };
+        setFlashcards(module.default);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error loading flashcards:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load flashcards",
+          variant: "destructive"
+        });
+        navigate('/');
+      }
+    };
+
+    if (topic) {
+      loadFlashcards();
     }
-  };
-
-  if (topic) {
-    loadFlashcards();
-  }
-}, [topicId, topic, navigate, toast]);
-
-
+  }, [topicId, topic, navigate, toast]);
 
   const handleNext = () => {
     if (currentIndex < flashcards.length - 1) {
@@ -184,9 +181,9 @@ const FlashcardPage = () => {
               <Card className="absolute inset-0 w-full h-full backface-hidden border-l-4 border-l-green-500 hover:shadow-xl transition-shadow duration-300">
                 <CardContent className="h-full flex flex-col justify-center p-4 sm:p-8">
                   <div className="text-center">
-                    <h3 className="text-sm sm:text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4 leading-relaxed">
-                      {currentCard.description}
-                    </h3>
+                    <div className="text-sm sm:text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4 leading-relaxed">
+                      <CodeHighlighter text={currentCard.description} />
+                    </div>
                     <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-6 sm:mt-8">
                       Tap to reveal answer {!isMobile && 'or press Spacebar'}
                     </p>
@@ -202,7 +199,7 @@ const FlashcardPage = () => {
                       Output:
                     </h3>
                     <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 sm:p-4 max-h-60 sm:max-h-none overflow-y-auto">
-                      <CodeHighlighter text={currentCard.output} />
+                      <CodeHighlighter text={`\`\`\`java\n${currentCard.output}\n\`\`\``} />
                     </div>
                     <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-3 sm:mt-4">
                       Tap to go back to question
