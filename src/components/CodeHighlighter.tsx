@@ -92,61 +92,64 @@ const CodeHighlighter: React.FC<CodeHighlighterProps> = ({ text }) => {
     ];
 
     const keywords = language === 'java' ? javaKeywords : jsKeywords;
-    let highlightedLine = escapeHtml(line);
-
-    // Highlight keywords
-    keywords.forEach((keyword) => {
-      const regex = new RegExp(`\\b${keyword}\\b`, 'g');
-      highlightedLine = highlightedLine.replace(
-        regex,
-        `<span class="text-blue-400 font-semibold">${keyword}</span>`
-      );
-    });
-
-    // Highlight strings (double quotes)
-    highlightedLine = highlightedLine.replace(
-      /"([^"]*)"/g,
-      `<span class="text-green-400">"$1"</span>`
+    
+    // Split line into tokens while preserving whitespace
+    const tokens = line.split(/(\s+|[^\w\s])/);
+    
+    return (
+      <span>
+        {tokens.map((token, index) => {
+          // Check if token is a keyword
+          if (keywords.includes(token)) {
+            return (
+              <span key={index} className="text-blue-400 font-semibold">
+                {token}
+              </span>
+            );
+          }
+          
+          // Check if token is a string (enclosed in quotes)
+          if ((token.startsWith('"') && token.endsWith('"')) || 
+              (token.startsWith("'") && token.endsWith("'"))) {
+            return (
+              <span key={index} className="text-green-400">
+                {token}
+              </span>
+            );
+          }
+          
+          // Check if token is a number
+          if (/^\d+(\.\d+)?$/.test(token)) {
+            return (
+              <span key={index} className="text-yellow-400">
+                {token}
+              </span>
+            );
+          }
+          
+          // Check if token is a comment
+          if (token.startsWith('//')) {
+            return (
+              <span key={index} className="text-gray-400 italic">
+                {token}
+              </span>
+            );
+          }
+          
+          // Check if token is a method call (followed by opening parenthesis)
+          if (index < tokens.length - 1 && tokens[index + 1] === '(' && /^\w+$/.test(token)) {
+            return (
+              <span key={index} className="text-purple-400">
+                {token}
+              </span>
+            );
+          }
+          
+          // Default: return token as is
+          return <span key={index}>{token}</span>;
+        })}
+      </span>
     );
-
-    // Highlight strings (single quotes)
-    highlightedLine = highlightedLine.replace(
-      /'([^']*)'/g,
-      `<span class="text-green-400">'$1'</span>`
-    );
-
-    // Highlight single-line comments
-    highlightedLine = highlightedLine.replace(
-      /\/\/(.*)/g,
-      `<span class="text-gray-400 italic">//$1</span>`
-    );
-
-    // Highlight multi-line comments
-    highlightedLine = highlightedLine.replace(
-      /\/\*(.*?)\*\//g,
-      `<span class="text-gray-400 italic">/*$1*/</span>`
-    );
-
-    // Highlight numbers
-    highlightedLine = highlightedLine.replace(
-      /\b\d+\b/g,
-      `<span class="text-yellow-400">$&</span>`
-    );
-
-    // Highlight method calls
-    highlightedLine = highlightedLine.replace(
-      /(\w+)(\()/g,
-      `<span class="text-purple-400">$1</span>$2`
-    );
-
-    return <span dangerouslySetInnerHTML={{ __html: highlightedLine }} />;
-  };
-
-  const escapeHtml = (unsafe: string) => {
-    return unsafe
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
   };
 
   return (
